@@ -5,12 +5,13 @@ using System;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private PlayerControl control;
     private Vector2 input;
     private Vector2 buffer;
     private bool isMoving;
-    private float speed = 4f;
+    private bool isRunning;
+    [SerializeField] float speed = 3f;
+    [SerializeField] float runningSpeed = 4f; 
     private Animator animator;
     public LayerMask solidObjectsLayer;
     public LayerMask longGrassLayer;
@@ -77,7 +78,10 @@ public class PlayerMovement : MonoBehaviour
         isMoving = true;
         while(Vector3.Distance(target, transform.position) > 0.0001f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            if(isRunning)
+                transform.position = Vector3.MoveTowards(transform.position, target, runningSpeed * Time.deltaTime);
+            else
+                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
             yield return null;
         }
         transform.position = new Vector3(SnapX(target.x), SnapY(target.y), 0);
@@ -86,9 +90,13 @@ public class PlayerMovement : MonoBehaviour
         {
             input = buffer;
             buffer = Vector2.zero;
+            isRunning = true;
+        }
+        else
+        {
+            isRunning = false;
         }
         checkEncounters();
-        
     }
     private bool isWalkable(Vector3 target)
     {

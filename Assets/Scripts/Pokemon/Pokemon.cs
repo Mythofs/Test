@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Pokemon
 {
-    public PokemonBase Base { get; set; }
-    public int Level { get; set; }
-    public int HP { get; set; }
-    public List<Move> Moves { get; set; }
+    private PokemonBase Base { get; set; }
+    private int Level { get; set; }
+    private int HP { get; set; }
+    private List<Move> Moves { get; set; }
     public Pokemon(PokemonBase pb, int l)
     {
         Base = pb;
