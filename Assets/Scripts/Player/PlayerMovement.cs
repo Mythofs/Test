@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetFloat("moveX", input.x);
                 animator.SetFloat("moveY", input.y);
                 Vector3 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y, 0);
-                if(isWalkable(target))
+                if(IsWalkable(target))
                     StartCoroutine(Move(target));
             }
         }
@@ -96,15 +96,15 @@ public class PlayerMovement : MonoBehaviour
         {
             isRunning = false;
         }
-        checkEncounters();
+        CheckEncounters();
     }
-    private bool isWalkable(Vector3 target)
+    private bool IsWalkable(Vector3 target)
     {
         if(Physics2D.OverlapCircle(target, 0.2f, solidObjectsLayer) != null)
             return false;
         return true;
     }
-    private void checkEncounters()
+    private void CheckEncounters()
     {
         if(Physics2D.OverlapCircle(transform.position, 0.2f, longGrassLayer) != null)
         {
