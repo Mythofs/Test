@@ -32,14 +32,11 @@ public class Item
 [System.Serializable]
 public class Inventory
 {
-    private List<Item> inventory;
+    public List<Item> inventory { get; set; }
+    public int capacity { get; set; }
     public Inventory()
     {
         inventory = new();
-    }
-    public List<Item> getInventory()
-    {
-        return inventory;
     }
     public void AddItem(Item item)
     {
@@ -50,15 +47,35 @@ public class Inventory
                 {
                     item.Amount = item.Amount + item1.Amount - item1.Base.MaxStack;
                     item1.Amount = item1.Base.MaxStack;
+                    if (inventory.Count < capacity)
+                        inventory.Add(item);
                 }
                 else
                     item1.Amount += item.Amount;
                 break;
             }
-        inventory.Add(item);
+        if(inventory.Count < capacity)
+            inventory.Add(item);
     }
     public void RemoveItem(Item item)
     {
-
+        foreach(var item1 in inventory)
+            if(item1.Base == item.Base)
+            {
+                item1.Amount -= item.Amount;
+                if (item1.Amount <= 0)
+                    inventory.Remove(item1);
+                break;
+            }
+    }
+    public int Count()
+    {
+        return inventory.Count;
+    }
+    public Item GetItem(int index)
+    {
+        if (index < 0 || index >= inventory.Count)
+            return null;
+        return inventory[index];
     }
 }
