@@ -13,7 +13,9 @@ public class InventoryMovement : MonoBehaviour
     private Action<InputAction.CallbackContext> onCancelInput;
     private Item selectedItem;
     private Image[] inventorySlots;
+    private Item[] items;
     [SerializeField] private Image mainInventory;
+    [SerializeField] private Image selector;
     [SerializeField] private TextMeshProUGUI sideItemName;
     [SerializeField] private Image sideItemSprite;
     [SerializeField] private TextMeshProUGUI sideItemDescription;
@@ -22,7 +24,11 @@ public class InventoryMovement : MonoBehaviour
     {
         control = new PlayerControl();
         inventorySlots = mainInventory.GetComponentsInChildren<Image>();
-        
+        items = new Item[inventorySlots.Length];
+        for(int a = 0; a < inventorySlots.Length; a++)
+        {
+            items[a] = new
+        }
         onCancelInput = ctx =>
         {
             input = Vector2.zero;
