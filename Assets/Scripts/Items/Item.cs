@@ -1,7 +1,5 @@
-using UnityEngine.Rendering;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.VisualScripting;
 
 [CreateAssetMenu(fileName = "Item", menuName = "Item/Create a new Item")]
 public class ItemBase : ScriptableObject

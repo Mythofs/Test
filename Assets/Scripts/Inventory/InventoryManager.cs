@@ -1,6 +1,8 @@
-using NUnit.Framework;
 using System.IO;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -13,18 +15,20 @@ public class InventoryManager : MonoBehaviour
         else
             Destroy(gameObject);
         Load();
-        if (inventory == null)
-            inventory = new Inventory();
+        inventory ??= new Inventory();
+        Display();
     }
     public void AddItem(Item item)
     {
         inventory.AddItem(item);
         Save();
+        Display();
     }
     public void RemoveItem(Item item)
     {
         inventory.RemoveItem(item);
         Save();
+        Display();
     }
     private void Save()
     {
@@ -38,6 +42,18 @@ public class InventoryManager : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             inventory = JsonUtility.FromJson<Inventory>(json);
+        }
+    }
+    private void Display()
+    {
+        int index = 0;
+        foreach(Transform child in transform)
+        {
+            if (index >= inventory.Count())
+                break;
+            Transform[] componenets = child.GetComponentsInChildren<Transform>().ToArray();
+            componenets[1].GetComponent<Image>().sprite = inventory.GetItem(index).Base.ItemSprite;
+            componenets[2].GetComponent<TextMeshProUGUI>().SetText("" + inventory.GetItem(index).Amount);
         }
     }
 }

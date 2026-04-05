@@ -1,10 +1,9 @@
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine.UI;
-using TMPro;
 
 public class InventoryMovement : MonoBehaviour
 {
@@ -12,18 +11,23 @@ public class InventoryMovement : MonoBehaviour
     private Vector2 input;
     private Action<InputAction.CallbackContext> onCancelInput;
     private int index = 0;
-    private Image[] inventorySlots;
+    private List<Image> inventorySlots;
+    private float lastMove = 0;
     [SerializeField] private Image mainInventory;
     [SerializeField] private TextMeshProUGUI sideItemName;
     [SerializeField] private Image sideItemSprite;
     [SerializeField] private TextMeshProUGUI sideItemDescription;
     [SerializeField] private int elementsPerRow;
+    [SerializeField] private float delay;
     
     private void Awake()
     {
-        Debug.Log("Awake");
         control = new PlayerControl();
-        inventorySlots = mainInventory.GetComponentsInChildren<Image>();
+        inventorySlots = new();
+        foreach (Transform child in mainInventory.transform)
+        {
+            inventorySlots.Add(child.GetComponent<Image>());
+        }
         onCancelInput = ctx =>
         {
             input = Vector2.zero;
@@ -42,36 +46,35 @@ public class InventoryMovement : MonoBehaviour
     }
     void Update()
     {
-        if(input != Vector2.zero)
+        if(input != Vector2.zero && lastMove + delay < Time.time)
         {
             if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
                 input.y = 0;
             else
                 input.x = 0;
             Move();
+            lastMove = Time.time;
         }
     }
     private void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("OnMove");
         input = context.ReadValue<Vector2>();
     }
     private void Move()
     {
-        Debug.Log("Move");
-        if(input.x > 0 && index + 1 < inventorySlots.Length)
+        if(input.x > 0 && index + 1 < inventorySlots.Count)
             index++;
         else if(input.x < 0 && index != 0)
             index--;
         else if(input.y > 0)
         {
-            index += elementsPerRow;
-            index = Math.Min(index, inventorySlots.Length - 1);
+            index -= elementsPerRow;
+            index = Math.Max(index, 0);
         }
         else
         {
-            index -= elementsPerRow;
-            index = Math.Max(index, 0);
+            index += elementsPerRow;
+            index = Math.Min(index, inventorySlots.Count - 1);
         }
         transform.position = inventorySlots[index].rectTransform.position;
         Item item = null;
