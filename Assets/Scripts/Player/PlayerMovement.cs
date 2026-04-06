@@ -1,7 +1,7 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.InputSystem;
 using System;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,8 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float speed = 3f;
     [SerializeField] float runningSpeed = 4f; 
     private Animator animator;
-    public LayerMask solidObjectsLayer;
-    public LayerMask longGrassLayer;
+    private LayerMask solidObjectsLayer;
+    private LayerMask longGrassLayer;
     private Action<InputAction.CallbackContext> onCancelInput;
 
     private void Awake()
