@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a7e6a8415eeb9346acb00164299cff0, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: Assembly-CSharp::ItemBase
-  itemName: 
-  desc: 
-  itemSprite: {fileID: 0}
-  maxStack: 1
+  itemId: 1
+  itemName: Wood
+  desc: A piece of wood
+  itemSprite: {fileID: -2067898546876541913, guid: 4e980ba7907927949b8df5e679fca8df, type: 3}
+  maxStack: 16
