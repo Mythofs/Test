@@ -19,12 +19,13 @@ public class ItemBase : ScriptableObject
 [System.Serializable]
 public class Item
 {
-    public ItemBase Base { get; set; }
-    public int Amount { get; set; }
-    public Item(ItemBase ib, int amount)
+    [SerializeField] private ItemBase itemBase;
+    [SerializeField] private int amount;
+    public ItemBase ItemBase => itemBase;
+    public int Amount => amount;
+    public void SetAmount(int Amount)
     {
-        Base = ib;
-        Amount = amount;
+        amount = Amount;
     }
 }
 [System.Serializable]
@@ -39,17 +40,17 @@ public class Inventory
     public void AddItem(Item item)
     {
         foreach (var item1 in inventory)
-            if (item1.Base == item.Base)
+            if (item1.ItemBase == item.ItemBase)
             {
-                if (item1.Amount + item.Amount > item1.Base.MaxStack)
+                if (item1.Amount + item.Amount > item1.ItemBase.MaxStack)
                 {
-                    item.Amount = item.Amount + item1.Amount - item1.Base.MaxStack;
-                    item1.Amount = item1.Base.MaxStack;
+                    item.SetAmount(item.Amount + item1.Amount - item1.ItemBase.MaxStack);
+                    item1.SetAmount(item1.ItemBase.MaxStack);
                     if (inventory.Count < capacity)
                         inventory.Add(item);
                 }
                 else
-                    item1.Amount += item.Amount;
+                    item1.SetAmount(item.Amount + item1.Amount);
                 break;
             }
         if(inventory.Count < capacity)
@@ -58,9 +59,9 @@ public class Inventory
     public void RemoveItem(Item item)
     {
         foreach(var item1 in inventory)
-            if(item1.Base == item.Base)
+            if(item1.ItemBase == item.ItemBase)
             {
-                item1.Amount -= item.Amount;
+                item1.SetAmount(item1.Amount - item.Amount);
                 if (item1.Amount <= 0)
                     inventory.Remove(item1);
                 break;
