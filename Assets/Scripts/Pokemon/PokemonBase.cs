@@ -19,7 +19,6 @@ public class PokemonBase : ScriptableObject
     [SerializeField] int speed;
     [SerializeField] List<LearnableMove> learnableMoves;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public string Name => pokemonName;
     public string Desc => desc;
     public Sprite FrontSprite => frontSprite;

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
-    public Inventory inventory { get; private set; }
+    public Inventory Inventory { get; private set; }
     private void Awake()
     {
         if (Instance == null)
@@ -15,24 +15,24 @@ public class InventoryManager : MonoBehaviour
         else
             Destroy(gameObject);
         Load();
-        inventory ??= new Inventory();
+        Inventory ??= new Inventory();
         Display();
     }
     public void AddItem(Item item)
     {
-        inventory.AddItem(item);
+        Inventory.AddItem(item);
         Save();
         Display();
     }
     public void RemoveItem(Item item)
     {
-        inventory.RemoveItem(item);
+        Inventory.RemoveItem(item);
         Save();
         Display();
     }
     private void Save()
     {
-        string json = JsonUtility.ToJson(inventory, true);
+        string json = JsonUtility.ToJson(Inventory, true);
         File.WriteAllText(Application.persistentDataPath + "/inventory.json", json);
     }
     private void Load()
@@ -41,24 +41,30 @@ public class InventoryManager : MonoBehaviour
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            inventory = JsonUtility.FromJson<Inventory>(json);
+            Inventory = JsonUtility.FromJson<Inventory>(json);
         }
     }
     private void Display()
     {
+        Debug.Log(Inventory.Count());
+        for (int a = 0; a < Inventory.Count(); a++)
+            Debug.Log(Inventory.GetItem(a).ItemBase.ItemName);
         int index = 0;
         foreach(Transform child in transform)
         {
             Transform[] componenets = child.GetComponentsInChildren<Transform>().ToArray();
-            if (index >= inventory.Count())
+            if (index >= Inventory.Count())
             {
                 componenets[1].GetComponent<Image>().enabled = false;
                 componenets[2].GetComponent<TextMeshProUGUI>().enabled = false;
             }
-            componenets[1].GetComponent<Image>().enabled = true;
-            componenets[2].GetComponent<TextMeshProUGUI>().enabled = true;
-            componenets[1].GetComponent<Image>().sprite = inventory.GetItem(index).Base.ItemSprite;
-            componenets[2].GetComponent<TextMeshProUGUI>().SetText("" + inventory.GetItem(index).Amount);
+            else
+            {
+                componenets[1].GetComponent<Image>().enabled = true;
+                componenets[2].GetComponent<TextMeshProUGUI>().enabled = true;
+                componenets[1].GetComponent<Image>().sprite = Inventory.GetItem(index).ItemBase.ItemSprite;
+                componenets[2].GetComponent<TextMeshProUGUI>().SetText("" + Inventory.GetItem(index).Amount);
+            }
             index++;
         }
     }

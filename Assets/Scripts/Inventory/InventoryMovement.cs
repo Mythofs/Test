@@ -10,16 +10,15 @@ public class InventoryMovement : MonoBehaviour
     private PlayerControl control;
     private Vector2 input;
     private Action<InputAction.CallbackContext> onCancelInput;
-    private int index = 0;
+    private int index;
     private List<Image> inventorySlots;
+    private float delay = 0.2f;
     private float lastMove = 0;
     [SerializeField] private Image mainInventory;
     [SerializeField] private TextMeshProUGUI sideItemName;
     [SerializeField] private Image sideItemSprite;
     [SerializeField] private TextMeshProUGUI sideItemDescription;
     [SerializeField] private int elementsPerRow;
-    [SerializeField] private float delay;
-    
     private void Awake()
     {
         control = new PlayerControl();
@@ -32,6 +31,8 @@ public class InventoryMovement : MonoBehaviour
         {
             input = Vector2.zero;
         };
+        index = inventorySlots.Count - 1;
+        transform.position = inventorySlots[inventorySlots.Count - 1].rectTransform.position;
     }
     private void OnEnable()
     {
@@ -62,36 +63,36 @@ public class InventoryMovement : MonoBehaviour
     }
     private void Move()
     {
-        if(input.x > 0 && index + 1 < inventorySlots.Count)
+        if(input.x < 0 && index + 1 < inventorySlots.Count)
             index++;
-        else if(input.x < 0 && index != 0)
+        else if(input.x > 0 && index != 0)
             index--;
         else if(input.y > 0)
         {
-            index -= elementsPerRow;
-            index = Math.Max(index, 0);
+            index += elementsPerRow;
+            index = Math.Max(index, inventorySlots.Count - 1);
         }
         else
         {
-            index += elementsPerRow;
-            index = Math.Min(index, inventorySlots.Count - 1);
+            index -= elementsPerRow;
+            index = Math.Min(index, 0);
         }
         transform.position = inventorySlots[index].rectTransform.position;
         Item item = null;
-        if (InventoryManager.Instance.inventory.Count() >= index)
-            item = InventoryManager.Instance.inventory.GetItem(index);
+        if (InventoryManager.Instance.Inventory.Count() >= index)
+            item = InventoryManager.Instance.Inventory.GetItem(index);
         if (item != null)
         {
-            sideItemDescription.SetText(item.Base.Desc);
-            sideItemName.SetText(item.Base.ItemName);
-            sideItemSprite.sprite = item.Base.ItemSprite;
+            sideItemDescription.SetText(item.ItemBase.Desc);
+            sideItemName.SetText(item.ItemBase.ItemName);
+            sideItemSprite.sprite = item.ItemBase.ItemSprite;
             sideItemSprite.enabled = true;
         }
         else
         {
             sideItemDescription.SetText("");
             sideItemName.SetText("");
-            sideItemName.enabled = false;
+            sideItemSprite.enabled = false;
         }
     }
 }

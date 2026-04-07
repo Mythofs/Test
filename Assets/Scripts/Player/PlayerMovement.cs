@@ -1,13 +1,14 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerControl control;
     private Vector2 input;
     private Vector2 buffer;
+    public static Vector2 facing { get; private set; } //for PlayerInteract
     private bool isMoving;
     private bool isRunning;
     [SerializeField] float speed = 3f;
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private LayerMask solidObjectsLayer;
     private LayerMask longGrassLayer;
+    private LayerMask interactableObjectsLayer;
     private Action<InputAction.CallbackContext> onCancelInput;
 
     private void Awake()
@@ -26,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
             input = Vector2.zero;
             buffer = Vector2.zero;
         };
+        solidObjectsLayer = LayerMask.GetMask("SolidObjects");
+        longGrassLayer = LayerMask.GetMask("LongGrass");
+        interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
     }
     private void OnEnable()
     {
@@ -50,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 direction = new Vector3(input.x, input.y, 0);
             if(direction != Vector3.zero)
             {
+                facing = input;
                 animator.SetFloat("moveX", input.x);
                 animator.SetFloat("moveY", input.y);
                 Vector3 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y, 0);
@@ -100,9 +106,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private bool IsWalkable(Vector3 target)
     {
-        if(Physics2D.OverlapCircle(target, 0.2f, solidObjectsLayer) != null)
-            return false;
-        return true;
+        //If it is not null, then there is overlap
+        bool blockedBySolid = Physics2D.OverlapCircle(target, 0.1f, solidObjectsLayer) != null;
+        bool blockedByInteractable = Physics2D.OverlapCircle(target, 0.1f, interactableObjectsLayer) != null;
+        return !blockedBySolid && !blockedByInteractable;
     }
     private void CheckEncounters()
     {
