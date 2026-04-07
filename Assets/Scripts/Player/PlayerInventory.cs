@@ -20,7 +20,9 @@ namespace Assets.Scripts.Player
 			control = new PlayerControl();
 			onCancelInput = ctx =>
 			{
-				//reset input
+				inInventory = false;
+				overworld.depth = 0;
+				inventory.depth = -1;
 			};
 		}
 		private void OnEnable()
