@@ -23,7 +23,7 @@ namespace Assets.Scripts.Player
 				inInventory = false;
 				overworld.depth = 0;
 				inventory.depth = -1;
-			};
+            };
 		}
 		private void OnEnable()
 		{
@@ -36,23 +36,22 @@ namespace Assets.Scripts.Player
 			control.Player.Inventory.performed -= OnInventory;
 			control.Player.Inventory.canceled -= onCancelInput;
 		}
-		private void Update()
-		{
-			if(inInventory)
-			{
-				overworld.depth = 0;
-				inventory.depth = -1;
-			}
-			else
-			{
-				overworld.depth = -1;
-				inventory.depth = 0;
-			}
-			inInventory = !inInventory;
-		}
 		private void OnInventory(InputAction.CallbackContext context)
 		{
-			input = context.ReadValue<Button>();
+			if(context.performed)
+			{
+				inInventory = !inInventory;
+				if(inInventory)
+				{
+					overworld.depth = 0;
+					inventory.depth = -1;
+				}
+				else
+				{
+					overworld.depth = -1;
+					inventory.depth = 0;
+				}
+			}
 		}
 	}
 }
