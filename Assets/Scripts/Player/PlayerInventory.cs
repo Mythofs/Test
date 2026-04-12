@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerInventory : MonoBehaviour
 {
 	private PlayerControl control;
-	private bool inInventory = false;
+	public static bool InInventory { get; private set; }
 	private float delay = 0.2f;
 	private float last = 0;
     [SerializeField] Camera overworld;
@@ -13,6 +13,7 @@ public class PlayerInventory : MonoBehaviour
     private void Awake()
 	{
 		control = new PlayerControl();
+		InInventory = false;
 	}
 	private void OnEnable()
 	{
@@ -28,8 +29,8 @@ public class PlayerInventory : MonoBehaviour
 		if (last + delay < Time.time)
 		{
 			last = Time.time;
-			inInventory = !inInventory;
-			if (inInventory)
+			InInventory = !InInventory;
+			if (InInventory)
 			{
 				overworld.depth = -1;
 				inventory.depth = 0;
