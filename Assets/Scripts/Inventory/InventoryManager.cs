@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         Load();
         Inventory ??= new Inventory();
+        Inventory.capacity = 50;
         Display();
     }
     public void AddItem(Item item)
