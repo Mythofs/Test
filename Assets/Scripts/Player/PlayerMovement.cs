@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnMove(InputAction.CallbackContext context)
     {
-        if(!isMoving)
+        if(!isMoving && !PlayerInventory.InInventory)
             input = context.ReadValue<Vector2>();
         else if (context.ReadValue<Vector2>() != Vector2.zero)
         {

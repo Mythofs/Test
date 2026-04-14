@@ -36,6 +36,7 @@ public class Inventory
     public Inventory()
     {
         inventory = new();
+        capacity = 50;
     }
     public void AddItem(Item item)
     {
