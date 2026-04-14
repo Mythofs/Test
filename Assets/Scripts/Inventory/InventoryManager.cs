@@ -46,7 +46,6 @@ public class InventoryManager : MonoBehaviour
     }
     private void Display()
     {
-        Debug.Log(Inventory.Count());
         for (int a = 0; a < Inventory.Count(); a++)
             Debug.Log(Inventory.GetItem(a).ItemBase.ItemName);
         int index = 0;

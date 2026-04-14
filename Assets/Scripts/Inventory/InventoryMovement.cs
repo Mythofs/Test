@@ -32,7 +32,8 @@ public class InventoryMovement : MonoBehaviour
             input = Vector2.zero;
         };
         index = inventorySlots.Count - 1;
-        transform.position = inventorySlots[inventorySlots.Count - 1].rectTransform.position;
+        transform.position = inventorySlots[index].rectTransform.position;
+        SetSideBar(index);
     }
     private void OnEnable()
     {
@@ -63,6 +64,7 @@ public class InventoryMovement : MonoBehaviour
     }
     private void Move()
     {
+        Debug.Log("Inventory input: " + input.x + " " + input.y);
         if(input.x < 0 && index + 1 < inventorySlots.Count)
             index++;
         else if(input.x > 0 && index != 0)
@@ -78,11 +80,26 @@ public class InventoryMovement : MonoBehaviour
             index = Math.Min(index, 0);
         }
         transform.position = inventorySlots[index].rectTransform.position;
-        Item item = null;
-        if (InventoryManager.Instance.Inventory.Count() >= index)
-            item = InventoryManager.Instance.Inventory.GetItem(index);
-        if (item != null)
+        if (index < InventoryManager.Instance.Inventory.Count())
         {
+            Item item = InventoryManager.Instance.Inventory.GetItem(index);
+            sideItemDescription.SetText(item.ItemBase.Desc);
+            sideItemName.SetText(item.ItemBase.ItemName);
+            sideItemSprite.sprite = item.ItemBase.ItemSprite;
+            sideItemSprite.enabled = true;
+        }
+        else
+        {
+            sideItemDescription.SetText("");
+            sideItemName.SetText("");
+            sideItemSprite.enabled = false;
+        }
+    }
+    private void SetSideBar(int index)
+    {
+        if (index < InventoryManager.Instance.Inventory.Count())
+        {
+            Item item = InventoryManager.Instance.Inventory.GetItem(index);
             sideItemDescription.SetText(item.ItemBase.Desc);
             sideItemName.SetText(item.ItemBase.ItemName);
             sideItemSprite.sprite = item.ItemBase.ItemSprite;
