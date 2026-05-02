@@ -98,7 +98,6 @@ public class InventoryMovement : MonoBehaviour
             item = InventoryManager.Instance.Inventory.GetItem(index);
         if (item != null)
         {
-            Item item = InventoryManager.Instance.Inventory.GetItem(index);
             sideItemDescription.SetText(item.ItemBase.Desc);
             sideItemName.SetText(item.ItemBase.ItemName);
             sideItemSprite.sprite = item.ItemBase.ItemSprite;

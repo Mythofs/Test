@@ -10,6 +10,8 @@ public class PlayerInventory : MonoBehaviour
 	private float last = 0;
     [SerializeField] Camera overworld;
     [SerializeField] Camera inventory;
+    [SerializeField] private PlayerMovement overworldMovement;
+
     private void Awake()
 	{
 		control = new PlayerControl();
@@ -34,12 +36,14 @@ public class PlayerInventory : MonoBehaviour
 			{
 				overworld.depth = -1;
 				inventory.depth = 0;
-			}
+                overworldMovement.enabled = false;
+            }
 			else
 			{
 				overworld.depth = 0;
 				inventory.depth = -1;
-			}
+                overworldMovement.enabled = true;
+            }
 		}
 	}
 }

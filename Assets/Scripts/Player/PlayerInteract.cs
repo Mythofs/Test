@@ -5,10 +5,14 @@ public class PlayerInteract : MonoBehaviour
 {
     private PlayerControl control;
     private LayerMask interactableObjectsLayer;
+    private bool InInteract;
+    private SpriteRenderer sr;
+    private IInteractable script;
     private void Awake()
     {
         control = new PlayerControl();
         interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
+        InInteract = false;
     }
     private void OnEnable()
     {
@@ -22,11 +26,16 @@ public class PlayerInteract : MonoBehaviour
     }
     private void OnInteract(InputAction.CallbackContext context)
     {
+        if(InInteract)
+        {
+            script.CloseDialog();
+        }
         Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.facing, 0.2f, interactableObjectsLayer);
         if(col != null)
         {
-            SpriteRenderer sr = col.GetComponent<SpriteRenderer>();
-            IInteractable script = sr.GetComponent<IInteractable>();
+            InInteract = true;
+            sr = col.GetComponent<SpriteRenderer>();
+            script = sr.GetComponent<IInteractable>();
             script.Interact();
         }
     }

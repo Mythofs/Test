@@ -1,27 +1,39 @@
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Chest : MonoBehaviour, IInteractable
 {
     private bool opened = false;
-    private SpriteRenderer sr;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite close;
     [SerializeField] private Sprite open;
     [SerializeField] private LootTable table;
+    [SerializeField] private TextMeshProUGUI text;
     private void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
-        sr.enabled = true;
-        sr.sprite = close;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = true;
+        spriteRenderer.sprite = close;
+        text.enabled = false;
     }
     public void Interact()
     {
         if(!opened)
-        { 
-            InventoryManager.Instance.AddItem(table.getRandomItem());
+        {
+            Item item = table.getRandomItem();
+            InventoryManager.Instance.AddItem(item);
             opened = !opened;
-            sr.sprite = open;
+            spriteRenderer.sprite = open;
+            text.SetText("You recieved " + item.Amount + " " + item.ItemBase.ItemName);
+            text.enabled = true;
         }
     }
-
+    public void CloseDialog()
+    {
+        if(text.enabled)
+        {
+            text.enabled = false;
+        }
+    }
 }
