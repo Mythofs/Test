@@ -1,39 +1,33 @@
-using TMPro;
+using Assets.Scripts.Player;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Chest : MonoBehaviour, IInteractable
+public class Chest : Interactable
 {
     private bool opened = false;
-    private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite close;
     [SerializeField] private Sprite open;
     [SerializeField] private LootTable table;
-    [SerializeField] private TextMeshProUGUI text;
-    private void Awake()
+    protected override void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.enabled = true;
+        base.Awake();
         spriteRenderer.sprite = close;
-        text.enabled = false;
     }
-    public void Interact()
+    public override void Interact()
     {
         if(!opened)
         {
+            overworldMovement.enabled = false;
             Item item = table.getRandomItem();
             InventoryManager.Instance.AddItem(item);
             opened = !opened;
             spriteRenderer.sprite = open;
-            text.SetText("You recieved " + item.Amount + " " + item.ItemBase.ItemName);
-            text.enabled = true;
+            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + item.Amount + " " + item.ItemBase.ItemName));
         }
     }
-    public void CloseDialog()
+    public override void CloseDialog()
     {
-        if(text.enabled)
-        {
-            text.enabled = false;
-        }
+        DialogBox.Instance.Enable(false);
+        overworldMovement.enabled = true;
     }
 }

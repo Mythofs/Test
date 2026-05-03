@@ -47,8 +47,6 @@ public class InventoryManager : MonoBehaviour
     }
     private void Display()
     {
-        for (int a = 0; a < Inventory.Count(); a++)
-            Debug.Log(Inventory.GetItem(a).ItemBase.ItemName);
         int index = 0;
         foreach(Transform child in transform)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,13 +13,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     private bool isRunning;
     [SerializeField] float speed = 3f;
-    [SerializeField] float runningSpeed = 4f; 
+    [SerializeField] float runningSpeed = 4f;
     private Animator animator;
     private LayerMask solidObjectsLayer;
     private LayerMask longGrassLayer;
     private LayerMask interactableObjectsLayer;
     private Action<InputAction.CallbackContext> onCancelInput;
-
     private void Awake()
     {
         control = new PlayerControl();
@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         solidObjectsLayer = LayerMask.GetMask("SolidObjects");
         longGrassLayer = LayerMask.GetMask("LongGrass");
         interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
+        Interactable.overworldMovement = this;
     }
     private void OnEnable()
     {

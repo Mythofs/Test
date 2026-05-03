@@ -7,7 +7,7 @@ public class PlayerInteract : MonoBehaviour
     private LayerMask interactableObjectsLayer;
     private bool InInteract;
     private SpriteRenderer sr;
-    private IInteractable script;
+    private Interactable script;
     private void Awake()
     {
         control = new PlayerControl();
@@ -29,13 +29,14 @@ public class PlayerInteract : MonoBehaviour
         if(InInteract)
         {
             script.CloseDialog();
+            InInteract = false;
         }
         Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.facing, 0.2f, interactableObjectsLayer);
         if(col != null)
         {
             InInteract = true;
             sr = col.GetComponent<SpriteRenderer>();
-            script = sr.GetComponent<IInteractable>();
+            script = sr.GetComponent<Interactable>();
             script.Interact();
         }
     }

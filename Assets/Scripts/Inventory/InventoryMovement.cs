@@ -15,7 +15,7 @@ public class InventoryMovement : MonoBehaviour
     private List<Image> inventorySlots;
     private float delay = 0.2f;
     private float lastMove = 0;
-    [SerializeField] private Image mainInventory;
+    [SerializeField] private GameObject mainInventory;
     [SerializeField] private TextMeshProUGUI sideItemName;
     [SerializeField] private Image sideItemSprite;
     [SerializeField] private TextMeshProUGUI sideItemDescription;
@@ -32,6 +32,7 @@ public class InventoryMovement : MonoBehaviour
         {
             input = Vector2.zero;
         };
+        Console.WriteLine("InventoryMovemnt awake!");
     }
     private void Start()
     {
