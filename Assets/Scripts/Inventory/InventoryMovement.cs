@@ -15,6 +15,7 @@ public class InventoryMovement : MonoBehaviour
     private List<Image> inventorySlots;
     private float delay = 0.2f;
     private float lastMove = 0;
+    public static InventoryMovement Instance { get; private set; }
     [SerializeField] private GameObject mainInventory;
     [SerializeField] private TextMeshProUGUI sideItemName;
     [SerializeField] private Image sideItemSprite;
@@ -32,7 +33,7 @@ public class InventoryMovement : MonoBehaviour
         {
             input = Vector2.zero;
         };
-        Console.WriteLine("InventoryMovemnt awake!");
+        Instance = this;
     }
     private void Start()
     {
@@ -92,13 +93,11 @@ public class InventoryMovement : MonoBehaviour
         transform.position = inventorySlots[index].rectTransform.position;
         SetSideBar();
     }
-    private void SetSideBar()
+    public void SetSideBar()
     {
-        Item item = null;
-        if (InventoryManager.Instance.Inventory.Count() >= index)
-            item = InventoryManager.Instance.Inventory.GetItem(index);
-        if (item != null)
+        if (InventoryManager.Instance.Inventory.Count() > index)
         {
+            Item item = InventoryManager.Instance.Inventory.GetItem(index);
             sideItemDescription.SetText(item.ItemBase.Desc);
             sideItemName.SetText(item.ItemBase.ItemName);
             sideItemSprite.sprite = item.ItemBase.ItemSprite;

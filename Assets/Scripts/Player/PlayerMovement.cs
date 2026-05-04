@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask solidObjectsLayer;
     private LayerMask longGrassLayer;
     private LayerMask interactableObjectsLayer;
+    private LayerMask portalsLayer;
     private Action<InputAction.CallbackContext> onCancelInput;
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         solidObjectsLayer = LayerMask.GetMask("SolidObjects");
         longGrassLayer = LayerMask.GetMask("LongGrass");
         interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
+        portalsLayer = LayerMask.GetMask("Portals");
         Interactable.overworldMovement = this;
     }
     private void OnEnable()
@@ -104,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
             isRunning = false;
         }
         CheckEncounters();
+        CheckPortal();
     }
     private bool IsWalkable(Vector3 target)
     {
@@ -120,12 +123,27 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Encountered a wild pokemon");
         }
     }
-    float SnapY(float y)
+    private void CheckPortal()
+    {
+        Collider2D col = Physics2D.OverlapCircle(transform.position, 0.2f, portalsLayer);
+        if (col != null)
+        {
+            Debug.Log("Colliding with portal detected");
+            Portal portal = col.GetComponent<Portal>();
+            portal.Warp(col);
+        } 
+    }
+    private float SnapY(float y)
     {
         return Mathf.Round(y - 0.8f) + 0.8f;
     }
-    float SnapX(float x)
+    private float SnapX(float x)
     {
         return Mathf.Round(x - 0.5f) + 0.5f;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
 }

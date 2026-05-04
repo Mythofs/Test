@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LootTable
   table:
   - itemBase: {fileID: 11400000, guid: f39103c4017bb2f478db994b66c28e32, type: 2}
-    amount: 1
+    amount: 50
   id: 1

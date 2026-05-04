@@ -19,10 +19,11 @@ public class Chest : Interactable
         {
             overworldMovement.enabled = false;
             Item item = table.getRandomItem();
-            InventoryManager.Instance.AddItem(item);
+            int amount = item.Amount;
+            Item leftover = InventoryManager.Instance.AddItem(item);
             opened = !opened;
             spriteRenderer.sprite = open;
-            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + item.Amount + " " + item.ItemBase.ItemName));
+            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
         }
     }
     public override void CloseDialog()

@@ -27,55 +27,78 @@ public class Item
     {
         amount = Amount;
     }
+    public Item(ItemBase itemBase, int amount)
+    {
+        this.itemBase = itemBase;
+        this.amount = amount;
+    }
 }
 [System.Serializable]
 public class Inventory
 {
-    public List<Item> inventory { get; set; }
-    public int capacity { get; set; }
+    public List<Item> ItemList { get; set; }
+    public int Capacity { get; set; }
     public Inventory()
     {
-        inventory = new();
-        capacity = 50;
+        ItemList = new();
+        Capacity = 50;
     }
-    public void AddItem(Item item)
+    //returns amount of item left over
+    public Item AddItem(Item item)
     {
-        foreach (var item1 in inventory)
-            if (item1.ItemBase == item.ItemBase)
+        foreach (var item1 in ItemList)
+            if(item1.ItemBase == item.ItemBase)
             {
-                if (item1.Amount + item.Amount > item1.ItemBase.MaxStack)
+                //if items > maxstack, update current stack, then add stacks
+                if(item.Amount + item1.Amount > item.ItemBase.MaxStack)
                 {
-                    item.SetAmount(item.Amount + item1.Amount - item1.ItemBase.MaxStack);
-                    item1.SetAmount(item1.ItemBase.MaxStack);
-                    if (inventory.Count < capacity)
-                        inventory.Add(item);
+                    item1.SetAmount(item.ItemBase.MaxStack);
+                    item.SetAmount(item.Amount + item1.Amount - item.ItemBase.MaxStack);
+                    while(item.Amount > item.ItemBase.MaxStack && ItemList.Count < Capacity)
+                    {
+                        ItemList.Add(new Item(item.ItemBase, item.ItemBase.MaxStack));
+                        item.SetAmount(item.Amount - item.ItemBase.MaxStack);
+                    }
+                    if(ItemList.Count < Capacity)
+                        ItemList.Add(item);
+                    else
+                        return item;
                 }
-                else
-                    item1.SetAmount(item.Amount + item1.Amount);
-                break;
             }
-        if(inventory.Count < capacity)
-            inventory.Add(item);
+        if (ItemList.Count == Capacity)
+            return item;
+        if(item.Amount > item.ItemBase.MaxStack)
+            while(item.Amount > item.ItemBase.MaxStack && ItemList.Count < Capacity)
+            {
+                ItemList.Add(new Item(item.ItemBase, item.ItemBase.MaxStack));
+                item.SetAmount(item.Amount - item.ItemBase.MaxStack);
+            }
+        if (ItemList.Count < Capacity)
+            ItemList.Add(item);
+        else
+            return item;
+        Debug.Log(ItemList.Count);
+        return new Item(item.ItemBase, 0);
     }
     public void RemoveItem(Item item)
     {
-        foreach(var item1 in inventory)
+        foreach(var item1 in ItemList)
             if(item1.ItemBase == item.ItemBase)
             {
                 item1.SetAmount(item1.Amount - item.Amount);
                 if (item1.Amount <= 0)
-                    inventory.Remove(item1);
+                    ItemList.Remove(item1);
                 break;
             }
     }
     public int Count()
     {
-        return inventory.Count;
+        return ItemList.Count;
     }
     public Item GetItem(int index)
     {
-        if (index < 0 || index >= inventory.Count)
+        if (index < 0 || index >= ItemList.Count)
             return null;
-        return inventory[index];
+        return ItemList[index];
     }
 }

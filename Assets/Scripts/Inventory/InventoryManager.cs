@@ -16,14 +16,16 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         Load();
         Inventory ??= new Inventory();
-        Inventory.capacity = 50;
+        Inventory.Capacity = 50;
         Display();
     }
-    public void AddItem(Item item)
+    public Item AddItem(Item item)
     {
-        Inventory.AddItem(item);
+        Item leftover = Inventory.AddItem(item);
         Save();
         Display();
+        
+        return leftover;
     }
     public void RemoveItem(Item item)
     {
@@ -65,5 +67,6 @@ public class InventoryManager : MonoBehaviour
             }
             index++;
         }
+        InventoryMovement.Instance.SetSideBar();
     }
 }
