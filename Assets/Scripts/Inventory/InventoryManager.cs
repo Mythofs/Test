@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Scripts.Inventory;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }

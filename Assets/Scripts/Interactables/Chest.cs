@@ -1,5 +1,6 @@
-using Assets.Scripts.Player;
 using UnityEngine;
+
+namespace Scripts.Interactables;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Chest : Interactable

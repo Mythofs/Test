@@ -2,9 +2,10 @@
 using TMPro;
 using UnityEngine;
 
+namespace Scripts.Interactables;
 public abstract class Interactable : MonoBehaviour
 {
-    public static PlayerMovement overworldMovement;
+    protected static PlayerMovement overworldMovement;
     protected SpriteRenderer spriteRenderer;
     protected virtual void Awake()
     {

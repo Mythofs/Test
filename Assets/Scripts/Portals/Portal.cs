@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+namespace Scripts.Portals;
 public class Portal : MonoBehaviour
 {
 	[SerializeField] private Transform destination;

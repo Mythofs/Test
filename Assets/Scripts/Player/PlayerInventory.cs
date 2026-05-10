@@ -2,6 +2,7 @@
 using System;
 using UnityEngine.InputSystem;
 
+namespace Scripts.Player;
 public class PlayerInventory : MonoBehaviour
 {
 	private PlayerControl control;

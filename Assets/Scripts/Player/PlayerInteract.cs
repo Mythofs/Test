@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Scripts.Player;
 public class PlayerInteract : MonoBehaviour
 {
     private PlayerControl control;

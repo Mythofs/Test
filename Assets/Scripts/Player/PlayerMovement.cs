@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Scripts.Player;
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerControl control;
     private Vector2 input;
     private Vector2 buffer;
-    public static Vector2 facing { get; private set; } //for PlayerInteract
+    private Vector2 offset = new(-0.3, 0);
+    public static Vector2 Facing { get; private set; } //for PlayerInteract
     private bool isMoving;
     private bool isRunning;
     [SerializeField] float speed = 3f;
@@ -58,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 direction = new Vector3(input.x, input.y, 0);
             if(direction != Vector3.zero)
             {
-                facing = input;
+                Facing = input;
                 animator.SetFloat("moveX", input.x);
                 animator.SetFloat("moveY", input.y);
                 Vector3 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y, 0);
@@ -111,13 +114,13 @@ public class PlayerMovement : MonoBehaviour
     private bool IsWalkable(Vector3 target)
     {
         //If it is not null, then there is overlap
-        bool blockedBySolid = Physics2D.OverlapCircle(target, 0.1f, solidObjectsLayer) != null;
-        bool blockedByInteractable = Physics2D.OverlapCircle(target, 0.1f, interactableObjectsLayer) != null;
+        bool blockedBySolid = Physics2D.OverlapCircle(target + offset, 0.1f, solidObjectsLayer) != null;
+        bool blockedByInteractable = Physics2D.OverlapCircle(target + offset, 0.1f, interactableObjectsLayer) != null;
         return !blockedBySolid && !blockedByInteractable;
     }
     private void CheckEncounters()
     {
-        if(Physics2D.OverlapCircle(transform.position, 0.2f, longGrassLayer) != null)
+        if(Physics2D.OverlapCircle(transform.position + offset, 0.2f, longGrassLayer) != null)
         {
             if(UnityEngine.Random.Range(1, 101) <= 10)
                 Debug.Log("Encountered a wild pokemon");
@@ -125,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void CheckPortal()
     {
-        Collider2D col = Physics2D.OverlapCircle(transform.position, 0.2f, portalsLayer);
+        Collider2D col = Physics2D.OverlapCircle(transform.position + offset, 0.2f, portalsLayer);
         if (col != null)
         {
             Debug.Log("Colliding with portal detected");

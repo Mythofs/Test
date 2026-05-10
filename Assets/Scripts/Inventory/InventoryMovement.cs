@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+namespace Scripts.Inventory;
 public class InventoryMovement : MonoBehaviour
 {
     private PlayerControl control;

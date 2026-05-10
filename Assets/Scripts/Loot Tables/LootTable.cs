@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+namespace Scripts.LootTables;
 [System.Serializable]
 [CreateAssetMenu(fileName = "LootTable", menuName = "Loot Table/Create a new Loot Table")]
 public class LootTable : ScriptableObject
