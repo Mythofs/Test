@@ -1,3 +1,5 @@
+using Scripts.Items;
+using Scripts.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,109 +8,111 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Scripts.Inventory;
-public class InventoryMovement : MonoBehaviour
+namespace Scripts.Inventory
 {
-    private PlayerControl control;
-    private Vector2 input;
-    private Action<InputAction.CallbackContext> onCancelInput;
-    private int index;
-    private List<Image> inventorySlots;
-    private float delay = 0.2f;
-    private float lastMove = 0;
-    public static InventoryMovement Instance { get; private set; }
-    [SerializeField] private GameObject mainInventory;
-    [SerializeField] private TextMeshProUGUI sideItemName;
-    [SerializeField] private Image sideItemSprite;
-    [SerializeField] private TextMeshProUGUI sideItemDescription;
-    [SerializeField] private int elementsPerRow;
-    private void Awake()
+    public class InventoryMovement : MonoBehaviour
     {
-        control = new PlayerControl();
-        inventorySlots = new();
-        foreach (Transform child in mainInventory.transform)
+        private PlayerControl control;
+        private Vector2 input;
+        private Action<InputAction.CallbackContext> onCancelInput;
+        private int index;
+        private List<Image> inventorySlots;
+        private float delay = 0.2f;
+        private float lastMove = 0;
+        public static InventoryMovement Instance { get; private set; }
+        [SerializeField] private GameObject mainInventory;
+        [SerializeField] private TextMeshProUGUI sideItemName;
+        [SerializeField] private Image sideItemSprite;
+        [SerializeField] private TextMeshProUGUI sideItemDescription;
+        [SerializeField] private int elementsPerRow;
+        private void Awake()
         {
-            inventorySlots.Add(child.GetComponent<Image>());
+            control = new PlayerControl();
+            inventorySlots = new();
+            foreach (Transform child in mainInventory.transform)
+            {
+                inventorySlots.Add(child.GetComponent<Image>());
+            }
+            onCancelInput = ctx =>
+            {
+                input = Vector2.zero;
+            };
+            Instance = this;
         }
-        onCancelInput = ctx =>
+        private void Start()
         {
-            input = Vector2.zero;
-        };
-        Instance = this;
-    }
-    private void Start()
-    {
-        index = 0;
-        StartCoroutine(SetPosition());
-        SetSideBar();
-    }
-    private IEnumerator SetPosition()
-    {
-        yield return null;
-        transform.position = inventorySlots[index].rectTransform.position;
-    }
-    private void OnEnable()
-    {
-        control.Enable();
-        control.UI.Move.performed += OnMove;
-        control.UI.Move.canceled += onCancelInput;
-    }
-    private void OnDisable()
-    {
-        control.UI.Move.performed -= OnMove;
-        control.UI.Move.canceled -= onCancelInput;
-    }
-    void Update()
-    {
-        if(input != Vector2.zero && lastMove + delay < Time.time && PlayerInventory.InInventory)
+            index = 0;
+            StartCoroutine(SetPosition());
+            SetSideBar();
+        }
+        private IEnumerator SetPosition()
         {
-            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-                input.y = 0;
+            yield return null;
+            transform.position = inventorySlots[index].rectTransform.position;
+        }
+        private void OnEnable()
+        {
+            control.Enable();
+            control.UI.Move.performed += OnMove;
+            control.UI.Move.canceled += onCancelInput;
+        }
+        private void OnDisable()
+        {
+            control.UI.Move.performed -= OnMove;
+            control.UI.Move.canceled -= onCancelInput;
+        }
+        void Update()
+        {
+            if (input != Vector2.zero && lastMove + delay < Time.time && PlayerInventory.InInventory)
+            {
+                if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+                    input.y = 0;
+                else
+                    input.x = 0;
+                Move();
+                lastMove = Time.time;
+            }
+        }
+        private void OnMove(InputAction.CallbackContext context)
+        {
+            input = context.ReadValue<Vector2>();
+        }
+        private void Move()
+        {
+            if (input.x > 0 && index + 1 < inventorySlots.Count)
+                index++;
+            else if (input.x < 0 && index != 0)
+                index--;
+            else if (input.y < 0)
+            {
+                index += elementsPerRow;
+                index = Math.Min(index, inventorySlots.Count - 1);
+            }
+            else if (input.y > 0)
+            {
+                index -= elementsPerRow;
+                index = Math.Max(index, 0);
+            }
+            transform.position = inventorySlots[index].rectTransform.position;
+            transform.position = inventorySlots[index].rectTransform.position;
+            SetSideBar();
+        }
+        public void SetSideBar()
+        {
+            if (InventoryManager.Instance.Inventory.Count() > index)
+            {
+                Item item = InventoryManager.Instance.Inventory.GetItem(index);
+                sideItemDescription.SetText(item.ItemBase.Desc);
+                sideItemName.SetText(item.ItemBase.ItemName);
+                sideItemSprite.sprite = item.ItemBase.ItemSprite;
+                sideItemSprite.enabled = true;
+            }
             else
-                input.x = 0;
-            Move();
-            lastMove = Time.time;
-        }
-    }
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        input = context.ReadValue<Vector2>();
-    }
-    private void Move()
-    {
-        if(input.x > 0 && index + 1 < inventorySlots.Count)
-            index++;
-        else if(input.x < 0 && index != 0)
-            index--;
-        else if(input.y < 0)
-        {
-            index += elementsPerRow;
-            index = Math.Min(index, inventorySlots.Count - 1);
-        }
-        else if(input.y > 0)
-        {
-            index -= elementsPerRow;
-            index = Math.Max(index, 0);
-        }
-        transform.position = inventorySlots[index].rectTransform.position;
-        transform.position = inventorySlots[index].rectTransform.position;
-        SetSideBar();
-    }
-    public void SetSideBar()
-    {
-        if (InventoryManager.Instance.Inventory.Count() > index)
-        {
-            Item item = InventoryManager.Instance.Inventory.GetItem(index);
-            sideItemDescription.SetText(item.ItemBase.Desc);
-            sideItemName.SetText(item.ItemBase.ItemName);
-            sideItemSprite.sprite = item.ItemBase.ItemSprite;
-            sideItemSprite.enabled = true;
-        }
-        else
-        {
-            sideItemDescription.SetText("");
-            sideItemName.SetText("");
-            sideItemSprite.enabled = false;
+            {
+                sideItemDescription.SetText("");
+                sideItemName.SetText("");
+                sideItemSprite.enabled = false;
+            }
         }
     }
 }

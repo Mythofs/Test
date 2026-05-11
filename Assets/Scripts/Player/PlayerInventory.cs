@@ -1,50 +1,51 @@
 ﻿using UnityEngine;
-using System;
 using UnityEngine.InputSystem;
 
-namespace Scripts.Player;
-public class PlayerInventory : MonoBehaviour
+namespace Scripts.Player
 {
-	private PlayerControl control;
-	public static bool InInventory { get; private set; }
-	private float delay = 0.2f;
-	private float last = 0;
-    [SerializeField] Camera overworld;
-    [SerializeField] Camera inventory;
-    [SerializeField] private PlayerMovement overworldMovement;
+	public class PlayerInventory : MonoBehaviour
+	{
+		private PlayerControl control;
+		public static bool InInventory { get; private set; }
+		private float delay = 0.2f;
+		private float last = 0;
+		[SerializeField] Camera overworld;
+		[SerializeField] Camera inventory;
+		[SerializeField] private PlayerMovement overworldMovement;
 
-    private void Awake()
-	{
-		control = new PlayerControl();
-		InInventory = false;
-	}
-	private void OnEnable()
-	{
-		control.Enable();
-		control.Player.Inventory.performed += OnInventory;
-	}
-	private void OnDisable()
-	{
-		control.Player.Inventory.performed -= OnInventory;
-	}
-	private void OnInventory(InputAction.CallbackContext context)
-	{
-		if (last + delay < Time.time)
+		private void Awake()
 		{
-			last = Time.time;
-			InInventory = !InInventory;
-			if (InInventory)
+			control = new PlayerControl();
+			InInventory = false;
+		}
+		private void OnEnable()
+		{
+			control.Enable();
+			control.Player.Inventory.performed += OnInventory;
+		}
+		private void OnDisable()
+		{
+			control.Player.Inventory.performed -= OnInventory;
+		}
+		private void OnInventory(InputAction.CallbackContext context)
+		{
+			if (last + delay < Time.time)
 			{
-				overworld.depth = -1;
-				inventory.depth = 0;
-                overworldMovement.enabled = false;
-            }
-			else
-			{
-				overworld.depth = 0;
-				inventory.depth = -1;
-                overworldMovement.enabled = true;
-            }
+				last = Time.time;
+				InInventory = !InInventory;
+				if (InInventory)
+				{
+					overworld.depth = -1;
+					inventory.depth = 0;
+					overworldMovement.enabled = false;
+				}
+				else
+				{
+					overworld.depth = 0;
+					inventory.depth = -1;
+					overworldMovement.enabled = true;
+				}
+			}
 		}
 	}
 }

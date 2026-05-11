@@ -1,35 +1,33 @@
+using Scripts.Inventory;
+using Scripts.Items;
+using Scripts.LootTables;
 using UnityEngine;
 
-namespace Scripts.Interactables;
-
-[RequireComponent(typeof(SpriteRenderer))]
-public class Chest : Interactable
+namespace Scripts.Interactables
 {
-    private bool opened = false;
-    [SerializeField] private Sprite close;
-    [SerializeField] private Sprite open;
-    [SerializeField] private LootTable table;
-    protected override void Awake()
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class Chest : Interactable
     {
-        base.Awake();
-        spriteRenderer.sprite = close;
-    }
-    public override void Interact()
-    {
-        if(!opened)
+        private bool opened = false;
+        [SerializeField] private Sprite close;
+        [SerializeField] private Sprite open;
+        [SerializeField] private LootTable table;
+        protected override void Awake()
         {
-            overworldMovement.enabled = false;
-            Item item = table.getRandomItem();
-            int amount = item.Amount;
-            Item leftover = InventoryManager.Instance.AddItem(item);
-            opened = !opened;
-            spriteRenderer.sprite = open;
-            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
+            base.Awake();
+            spriteRenderer.sprite = close;
         }
-    }
-    public override void CloseDialog()
-    {
-        DialogBox.Instance.Enable(false);
-        overworldMovement.enabled = true;
+        public override void Interact()
+        {
+            if (!opened)
+            {
+                Item item = table.getRandomItem();
+                int amount = item.Amount;
+                Item leftover = InventoryManager.Instance.AddItem(item);
+                opened = !opened;
+                spriteRenderer.sprite = open;
+                StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
+            }
+        }
     }
 }

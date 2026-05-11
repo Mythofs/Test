@@ -1,17 +1,20 @@
-﻿using System.Collections;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using Scripts.Player;
 
-namespace Scripts.Interactables;
-public abstract class Interactable : MonoBehaviour
+namespace Scripts.Interactables
 {
-    protected static PlayerMovement overworldMovement;
-    protected SpriteRenderer spriteRenderer;
-    protected virtual void Awake()
+    public abstract class Interactable : MonoBehaviour
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.enabled = true;
+        protected SpriteRenderer spriteRenderer;
+        protected virtual void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.enabled = true;
+        }
+        public abstract void Interact();
+        public void CloseDialog()
+        {
+            DialogBox.Instance.Enable(false);
+        }
     }
-    public abstract void Interact();
-    public abstract void CloseDialog();
 }

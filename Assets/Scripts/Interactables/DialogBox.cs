@@ -2,30 +2,32 @@
 using TMPro;
 using UnityEngine;
 
-namespace Scripts.Interactables;
-public class DialogBox : MonoBehaviour
+namespace Scripts.Interactables
 {
-    public static DialogBox Instance { get; private set; }
-    private TextMeshProUGUI text;
-    private void Awake()
+    public class DialogBox : MonoBehaviour
     {
-        Instance = this;
-        Enable(false);
-        text = GetComponentInChildren<TextMeshProUGUI>();
-        text.text = "";
-    }
-    public IEnumerator DisplayText(string str)
-    {
-        text.text = "";
-        Enable(true);
-        foreach (char c in str)
+        public static DialogBox Instance { get; private set; }
+        private TextMeshProUGUI text;
+        private void Awake()
         {
-            text.text += c;
-            yield return null;
+            Instance = this;
+            Enable(false);
+            text = GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "";
         }
-    }
-    public void Enable(bool b)
-    {
-        gameObject.SetActive(b);
+        public IEnumerator DisplayText(string str)
+        {
+            text.text = "";
+            Enable(true);
+            foreach (char c in str)
+            {
+                text.text += c;
+                yield return null;
+            }
+        }
+        public void Enable(bool b)
+        {
+            gameObject.SetActive(b);
+        }
     }
 }

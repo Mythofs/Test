@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Scripts.Portals;
-public class Portal : MonoBehaviour
+namespace Scripts.Portals
 {
-	[SerializeField] private Transform destination;
-	public void Warp(Collider2D player)
+	public class Portal : MonoBehaviour
 	{
-		player.transform.position = destination.position;
+		[SerializeField] private Transform destination;
+		public void Warp(Collider2D player)
+		{
+			player.transform.position = destination.position;
+		}
 	}
 }
