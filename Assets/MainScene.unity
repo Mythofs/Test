@@ -7384,6 +7384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557da8998201ea940a0bc5324bc7f330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
+  overworldMovement: {fileID: 523324785}
 --- !u!1 &553488736
 GameObject:
   m_ObjectHideFlags: 0
