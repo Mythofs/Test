@@ -29,5 +29,9 @@ namespace Scripts.Interactables
                 StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
             }
         }
+        public override bool CanInteract()
+        {
+            return !opened;
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Scripts.Inventory
         private PlayerControl control;
         private Vector2 input;
         private Action<InputAction.CallbackContext> onCancelInput;
-        private int index;
+        private int index = 0;
         private List<Image> inventorySlots;
         private float delay = 0.2f;
         private float lastMove = 0;
@@ -38,9 +38,6 @@ namespace Scripts.Inventory
                 input = Vector2.zero;
             };
             Instance = this;
-        }
-        private void Start()
-        {
             index = 0;
             StartCoroutine(SetPosition());
             SetSideBar();

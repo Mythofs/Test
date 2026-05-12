@@ -39,11 +39,14 @@ namespace Scripts.Player
             Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing, 0.2f, interactableObjectsLayer);
             if (col != null)
             {
-                overworldMovement.enabled = false;
-                InInteract = true;
                 sr = col.GetComponent<SpriteRenderer>();
                 script = sr.GetComponent<Interactable>();
-                script.Interact();
+                if (script.CanInteract())
+                {
+                    overworldMovement.enabled = false;
+                    InInteract = true;
+                    script.Interact();
+                }
             }
         }
     }

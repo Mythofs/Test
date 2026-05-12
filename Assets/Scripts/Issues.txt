@@ -1,5 +1,4 @@
 Portals don't work
 Upon opening inventory for the first time, selector is in some random place
 Inventory doesn't preserve across sessions
-Interacting twice with chest works
 Opening chest breaks inventory
