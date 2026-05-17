@@ -11,7 +11,8 @@ namespace Scripts.Player
 		private float last = 0;
 		[SerializeField] Camera overworld;
 		[SerializeField] Camera inventory;
-		[SerializeField] private PlayerMovement overworldMovement;
+		[SerializeField] private PlayerMovement playerMovement;
+		[SerializeField] private PlayerInteract playerInteract;
 
 		private void Awake()
 		{
@@ -37,13 +38,15 @@ namespace Scripts.Player
 				{
 					overworld.depth = -1;
 					inventory.depth = 0;
-					overworldMovement.enabled = false;
+					playerMovement.enabled = false;
+					playerInteract.enabled = false;
 				}
 				else
 				{
 					overworld.depth = 0;
 					inventory.depth = -1;
-					overworldMovement.enabled = true;
+					playerMovement.enabled = true;
+					playerInteract.enabled = true;
 				}
 			}
 		}

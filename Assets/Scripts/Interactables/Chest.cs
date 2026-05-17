@@ -19,15 +19,12 @@ namespace Scripts.Interactables
         }
         public override void Interact()
         {
-            if (!opened)
-            {
-                Item item = table.getRandomItem();
-                int amount = item.Amount;
-                Item leftover = InventoryManager.Instance.AddItem(item);
-                opened = !opened;
-                spriteRenderer.sprite = open;
-                StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
-            }
+            opened = !opened;
+            Item item = table.GetRandomItem();
+            int amount = item.Amount;
+            Item leftover = InventoryManager.Instance.AddItem(item);
+            spriteRenderer.sprite = open;
+            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
         }
         public override bool CanInteract()
         {

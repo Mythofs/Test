@@ -5,9 +5,10 @@ namespace Scripts.Portals
 	public class Portal : MonoBehaviour
 	{
 		[SerializeField] private Transform destination;
-		public void Warp(Collider2D player)
+		private Vector2 offset = new Vector2(0, 0.8f);
+		public void Warp(Transform player)
 		{
-			player.transform.position = destination.position;
+			player.position = new Vector2(destination.position.x + offset.x, destination.position.y + offset.y);
 		}
 	}
 }

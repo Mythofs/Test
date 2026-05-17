@@ -6,7 +6,9 @@ namespace Scripts.Player
 {
     public class PlayerInteract : MonoBehaviour
     {
-        [SerializeField] private PlayerMovement overworldMovement;
+        [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private PlayerInventory playerInventory;
+        private Vector2 offset = new(0f, -0.3f);
         private PlayerControl control;
         private LayerMask interactableObjectsLayer;
         private bool InInteract;
@@ -34,16 +36,18 @@ namespace Scripts.Player
             {
                 script.CloseDialog();
                 InInteract = false;
-                overworldMovement.enabled = true;
+                playerMovement.enabled = true;
+                playerInventory.enabled = true;
             }
-            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing, 0.2f, interactableObjectsLayer);
+            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing + offset, 0.2f, interactableObjectsLayer);
             if (col != null)
             {
                 sr = col.GetComponent<SpriteRenderer>();
                 script = sr.GetComponent<Interactable>();
                 if (script.CanInteract())
                 {
-                    overworldMovement.enabled = false;
+                    playerMovement.enabled = false;
+                    playerInventory.enabled = false;
                     InInteract = true;
                     script.Interact();
                 }

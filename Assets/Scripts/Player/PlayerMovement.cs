@@ -11,12 +11,13 @@ namespace Scripts.Player
         private PlayerControl control;
         private Vector2 input;
         private Vector2 buffer;
-        private Vector3 offset = new(0f, -0.3f, 0f);
+        private Vector2 offset = new(0f, -0.3f);
         public static Vector2 Facing { get; private set; } //for PlayerInteract
         private bool isMoving;
         private bool isRunning;
-        [SerializeField] float speed = 3f;
-        [SerializeField] float runningSpeed = 4f;
+        private readonly float speed = 3f;
+        private readonly float runningSpeed = 4f;
+        [SerializeField] private float hitboxSize;
         private Animator animator;
         private LayerMask solidObjectsLayer;
         private LayerMask longGrassLayer;
@@ -63,7 +64,7 @@ namespace Scripts.Player
                     Facing = input;
                     animator.SetFloat("moveX", input.x);
                     animator.SetFloat("moveY", input.y);
-                    Vector3 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y, 0);
+                    Vector2 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y);
                     if (IsWalkable(target))
                         StartCoroutine(Move(target));
                 }
@@ -84,18 +85,18 @@ namespace Scripts.Player
                 buffer = raw.normalized;
             }
         }
-        private IEnumerator Move(Vector3 target)
+        private IEnumerator Move(Vector2 target)
         {
             isMoving = true;
-            while (Vector3.Distance(target, transform.position) > 0.0001f)
+            while (Vector2.Distance(target, transform.position) > 0.0001f)
             {
                 if (isRunning)
-                    transform.position = Vector3.MoveTowards(transform.position, target, runningSpeed * Time.deltaTime);
+                    transform.position = Vector2.MoveTowards(transform.position, target, runningSpeed * Time.deltaTime);
                 else
-                    transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                    transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
                 yield return null;
             }
-            transform.position = new Vector3(SnapX(target.x), SnapY(target.y), 0);
+            transform.position = new Vector2(SnapX(target.x), SnapY(target.y));
             isMoving = false;
             if (buffer != Vector2.zero)
             {
@@ -110,16 +111,16 @@ namespace Scripts.Player
             CheckEncounters();
             CheckPortal();
         }
-        private bool IsWalkable(Vector3 target)
+        private bool IsWalkable(Vector2 target)
         {
             //If it is not null, then there is overlap
-            bool blockedBySolid = Physics2D.OverlapCircle(target + offset, 0.1f, solidObjectsLayer) != null;
-            bool blockedByInteractable = Physics2D.OverlapCircle(target + offset, 0.1f, interactableObjectsLayer) != null;
+            bool blockedBySolid = Physics2D.OverlapCircle(target + offset, hitboxSize, solidObjectsLayer) != null;
+            bool blockedByInteractable = Physics2D.OverlapCircle(target + offset, hitboxSize, interactableObjectsLayer) != null;
             return !blockedBySolid && !blockedByInteractable;
         }
         private void CheckEncounters()
         {
-            if (Physics2D.OverlapCircle(transform.position + offset, 0.2f, longGrassLayer) != null)
+            if (Physics2D.OverlapCircle(new Vector2(transform.position.x + offset.x, transform.position.y + offset.y), hitboxSize, longGrassLayer) != null)
             {
                 if (UnityEngine.Random.Range(1, 101) <= 10)
                     Debug.Log("Encountered a wild pokemon");
@@ -127,12 +128,11 @@ namespace Scripts.Player
         }
         private void CheckPortal()
         {
-            Collider2D col = Physics2D.OverlapCircle(transform.position + offset, 0.2f, portalsLayer);
+            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x + offset.x, transform.position.y + offset.y), hitboxSize, portalsLayer);
             if (col != null)
             {
-                Debug.Log("Colliding with portal detected");
                 Portal portal = col.GetComponent<Portal>();
-                portal.Warp(col);
+                portal.Warp(transform);
             }
         }
         private float SnapY(float y)
@@ -142,11 +142,6 @@ namespace Scripts.Player
         private float SnapX(float x)
         {
             return Mathf.Round(x - 0.5f) + 0.5f;
-        }
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position + offset, 0.2f);
         }
     }
 }

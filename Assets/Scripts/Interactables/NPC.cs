@@ -17,5 +17,9 @@ namespace Scripts.Interactables
             StartCoroutine(DialogBox.Instance.DisplayText(dialog[index]));
             index++;
         }
+        public override bool CanInteract()
+        {
+            return true;
+        }
     }
 }

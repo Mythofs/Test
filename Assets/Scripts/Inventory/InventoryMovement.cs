@@ -1,7 +1,6 @@
 using Scripts.Items;
 using Scripts.Player;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -38,14 +37,12 @@ namespace Scripts.Inventory
                 input = Vector2.zero;
             };
             Instance = this;
-            index = 0;
-            StartCoroutine(SetPosition());
-            SetSideBar();
         }
-        private IEnumerator SetPosition()
+        private void Start()
         {
-            yield return null;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(mainInventory.GetComponent<RectTransform>());
             transform.position = inventorySlots[index].rectTransform.position;
+            SetSideBar();
         }
         private void OnEnable()
         {
@@ -90,7 +87,6 @@ namespace Scripts.Inventory
                 index -= elementsPerRow;
                 index = Math.Max(index, 0);
             }
-            transform.position = inventorySlots[index].rectTransform.position;
             transform.position = inventorySlots[index].rectTransform.position;
             SetSideBar();
         }

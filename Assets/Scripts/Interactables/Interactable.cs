@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Scripts.Player;
 
 namespace Scripts.Interactables
 {
@@ -12,7 +11,7 @@ namespace Scripts.Interactables
             spriteRenderer.enabled = true;
         }
         public abstract void Interact();
-        public abstract void CanInteract();
+        public abstract bool CanInteract();
         public void CloseDialog()
         {
             DialogBox.Instance.Enable(false);

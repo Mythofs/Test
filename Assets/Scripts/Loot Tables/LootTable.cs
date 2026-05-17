@@ -8,16 +8,16 @@ namespace Scripts.LootTables
     [CreateAssetMenu(fileName = "LootTable", menuName = "Loot Table/Create a new Loot Table")]
     public class LootTable : ScriptableObject
     {
-        [SerializeField] List<Item> table;
+        [SerializeField] private List<Item> table;
         [SerializeField] private int id;
         public List<Item> Table => table;
         public int Id => id;
-        public Item getRandomItem()
+        public Item GetRandomItem()
         {
             if (table != null && table.Count != 0)
             {
                 int ran = UnityEngine.Random.Range(0, table.Count);
-                return table[ran];
+                return new Item(table[ran].ItemBase, table[ran].Amount);
             }
             return null;
         }

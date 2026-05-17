@@ -20,6 +20,9 @@ namespace Scripts.Inventory
             Load();
             Inventory ??= new Scripts.Items.Inventory();
             Inventory.Capacity = 50;
+        }
+        private void Start()
+        {
             Display();
         }
         public Item AddItem(Item item)
@@ -27,7 +30,7 @@ namespace Scripts.Inventory
             Item leftover = Inventory.AddItem(item);
             Save();
             Display();
-
+            InventoryMovement.Instance.SetSideBar();
             return leftover;
         }
         public void RemoveItem(Item item)
@@ -70,7 +73,6 @@ namespace Scripts.Inventory
                 }
                 index++;
             }
-            InventoryMovement.Instance.SetSideBar();
         }
     }
 }
