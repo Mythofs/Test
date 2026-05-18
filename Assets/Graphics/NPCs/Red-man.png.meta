@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2927203baeebb324c80546a3ec710ef5
+guid: 07cb51ca657ae6f41854b6d1f2dbee7c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6078555428644569182
-    second: SideInventory_0
+      213: 5043298385687621367
+    second: Red-man_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SideInventory_0
+      name: Red-man_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
-        height: 128
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 6, y: 10, z: 4, w: 11}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2af3e101b02a4aba0800000000000000
-      internalID: -6078555428644569182
+      spriteID: 7fe263749256df540800000000000000
+      internalID: 5043298385687621367
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: faceb3aafdc3cde48a75e16c45f0724a
+    spriteID: cf8c6b64bf2df594caf9764e21672dd5
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SideInventory_0: -6078555428644569182
+      Red-man_0: 5043298385687621367
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

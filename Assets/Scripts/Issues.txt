@@ -1,1 +1,0 @@
-Inventory doesn't preserve across sessions

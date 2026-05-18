@@ -1,0 +1,6 @@
+Issues
+Inventory doesn't preserve across sessions
+
+Features
+Finish NPC
+Add crafting system

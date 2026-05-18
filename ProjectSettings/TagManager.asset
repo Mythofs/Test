@@ -17,7 +17,7 @@ TagManager:
   - LongGrass
   - InteractableObjects
   - Portals
-  - 
+  - Background
   - 
   - 
   - 
@@ -44,11 +44,14 @@ TagManager:
   - name: Background
     uniqueID: 2257784449
     locked: 0
-  - name: Foreground
+  - name: Middleground
     uniqueID: 2339960889
     locked: 0
   - name: Player
     uniqueID: 409216711
+    locked: 0
+  - name: Foreground
+    uniqueID: 2982393315
     locked: 0
   m_RenderingLayers:
   - Default
