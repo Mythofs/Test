@@ -10,7 +10,7 @@ namespace Scripts.Inventory
     public class InventoryManager : MonoBehaviour
     {
         public static InventoryManager Instance { get; private set; }
-        public Scripts.Items.Inventory Inventory { get; private set; }
+        public Inventory Inventory { get; private set; }
         private void Awake()
         {
             if (Instance == null)
@@ -18,7 +18,7 @@ namespace Scripts.Inventory
             else
                 Destroy(gameObject);
             Load();
-            Inventory ??= new Scripts.Items.Inventory();
+            Inventory ??= new Inventory();
             Inventory.Capacity = 50;
         }
         private void Start()
@@ -50,7 +50,7 @@ namespace Scripts.Inventory
             if (File.Exists(path))
             {
                 string json = File.ReadAllText(path);
-                Inventory = JsonUtility.FromJson<Scripts.Items.Inventory>(json);
+                Inventory = JsonUtility.FromJson<Inventory>(json);
             }
         }
         private void Display()

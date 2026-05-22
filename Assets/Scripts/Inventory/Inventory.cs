@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Scripts.Items;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Scripts.Items
+namespace Scripts.Inventory
 {
     [System.Serializable]
     public class Inventory
     {
-        public List<Item> ItemList { get; set; }
+        [SerializeField] ItemDatabase itemDatabase;
+        public List<Item> ItemList { get; private set; }
+        public List<ItemBase> CraftableItems { get; private set; }
         public int Capacity { get; set; }
         public Inventory()
         {
@@ -31,11 +35,17 @@ namespace Scripts.Items
                         if (ItemList.Count < Capacity)
                             ItemList.Add(item);
                         else
+                        {
+                            UpdateCraftable();
                             return item;
+                        }
                     }
                 }
             if (ItemList.Count == Capacity)
+            {
+                UpdateCraftable();
                 return item;
+            }
             if (item.Amount > item.ItemBase.MaxStack)
                 while (item.Amount > item.ItemBase.MaxStack && ItemList.Count < Capacity)
                 {
@@ -45,7 +55,11 @@ namespace Scripts.Items
             if (ItemList.Count < Capacity)
                 ItemList.Add(item);
             else
+            {
+                UpdateCraftable();
                 return item;
+            }
+            UpdateCraftable();
             return new Item(item.ItemBase, 0);
         }
         public void RemoveItem(Item item)
@@ -68,6 +82,30 @@ namespace Scripts.Items
             if (index < 0 || index >= ItemList.Count)
                 return null;
             return ItemList[index];
+        }
+        private void UpdateCraftable()
+        {
+            foreach(ItemBase itemBase in itemDatabase.AllItems)
+            {
+                if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
+                    CraftableItems.Add(itemBase);
+            }
+        }
+        private bool CanCraft(ItemBase itemBase)
+        {
+            if (itemBase.CraftingRecipe == null)
+                return false;
+            int i = itemBase.CraftingRecipe.Count;
+            foreach(Item ingredient in itemBase.CraftingRecipe)
+            {
+                foreach (Item item in ItemList)
+                    if (ingredient.ItemBase.ItemName == item.ItemBase.ItemName)
+                        if (ingredient.Amount > item.Amount)
+                            return false;
+                        else
+                            i--;
+            }
+            return i == 0;
         }
     }
 }
