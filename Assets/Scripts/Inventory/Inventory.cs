@@ -7,14 +7,16 @@ namespace Scripts.Inventory
     [System.Serializable]
     public class Inventory
     {
-        [SerializeField] ItemDatabase itemDatabase;
+        private readonly ItemDatabase itemDatabase;
         public List<Item> ItemList { get; private set; }
         public List<ItemBase> CraftableItems { get; private set; }
-        public int Capacity { get; set; }
-        public Inventory()
+        public int Capacity { get; private set; }
+        public Inventory(ItemDatabase itemdb, int capacity)
         {
             ItemList = new();
-            Capacity = 50;
+            CraftableItems = new();
+            Capacity = capacity;
+            itemDatabase = itemdb;
         }
         //returns amount of item left over
         public Item AddItem(Item item)

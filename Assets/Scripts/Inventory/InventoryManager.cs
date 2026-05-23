@@ -1,14 +1,20 @@
 using Scripts.Items;
-using System.Linq;
+using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace Scripts.Inventory
 {
     public class InventoryManager : MonoBehaviour
     {
+        [SerializeField] private List<InventorySlot> inventorySlots;
+        [SerializeField] private TextMeshProUGUI sideNameText;
+        [SerializeField] private Image sideImage;
+        [SerializeField] private TextMeshProUGUI sideDescText;
+        [SerializeField] private ItemDatabase allItems;
+        private InventorySlot selectedSlot;
         public static InventoryManager Instance { get; private set; }
         public Inventory Inventory { get; private set; }
         private void Awake()
@@ -18,11 +24,12 @@ namespace Scripts.Inventory
             else
                 Destroy(gameObject);
             Load();
-            Inventory ??= new Inventory();
-            Inventory.Capacity = 50;
+            Inventory = new Inventory(allItems, 50);
         }
         private void Start()
         {
+            foreach (InventorySlot slot in inventorySlots)
+                slot.OnSlotSelected += slot => selectedSlot = slot;
             Display();
         }
         public Item AddItem(Item item)
@@ -30,7 +37,6 @@ namespace Scripts.Inventory
             Item leftover = Inventory.AddItem(item);
             Save();
             Display();
-            InventoryMovement.Instance.SetSideBar();
             return leftover;
         }
         public void RemoveItem(Item item)
@@ -56,22 +62,40 @@ namespace Scripts.Inventory
         private void Display()
         {
             int index = 0;
-            foreach (Transform child in transform)
+            foreach (InventorySlot slot in inventorySlots)
             {
-                Transform[] componenets = child.GetComponentsInChildren<Transform>().ToArray();
                 if (index >= Inventory.Count())
+                    slot.ClearItem();
+                else
+                    slot.SetItem(Inventory.GetItem(index));
+                index++;
+            }
+            SetSideBar();
+        }
+        public void SetSideBar()
+        {
+            if (selectedSlot != null)
+            {
+                Item current = selectedSlot.GetItem();
+                if (current != null)
                 {
-                    componenets[1].GetComponent<Image>().enabled = false;
-                    componenets[2].GetComponent<TextMeshProUGUI>().enabled = false;
+                    sideNameText.SetText(current.ItemBase.ItemName);
+                    sideImage.enabled = true;
+                    sideImage.sprite = current.ItemBase.ItemSprite;
+                    sideDescText.SetText(current.ItemBase.Desc);
                 }
                 else
                 {
-                    componenets[1].GetComponent<Image>().enabled = true;
-                    componenets[2].GetComponent<TextMeshProUGUI>().enabled = true;
-                    componenets[1].GetComponent<Image>().sprite = Inventory.GetItem(index).ItemBase.ItemSprite;
-                    componenets[2].GetComponent<TextMeshProUGUI>().SetText("" + Inventory.GetItem(index).Amount);
+                    sideNameText.SetText("");
+                    sideImage.enabled = false;
+                    sideDescText.SetText("");
                 }
-                index++;
+            }
+            else
+            {
+                sideNameText.SetText("");
+                sideImage.enabled = false;
+                sideDescText.SetText("");
             }
         }
     }
