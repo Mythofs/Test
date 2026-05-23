@@ -5,3 +5,4 @@ PlayerInteract doesn't disable itself when in interact (minor)
 
 Features
 Add crafting system
+Improve input system in inventory and crafting
