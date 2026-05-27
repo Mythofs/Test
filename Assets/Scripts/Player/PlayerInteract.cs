@@ -16,28 +16,47 @@ namespace Scripts.Player
         private Interactable script;
         private void Awake()
         {
-            control = new PlayerControl();
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
             InInteract = false;
         }
+        private void Start()
+        {
+            control = PlayerInputManager.Instance.Control;
+            OnEnable();
+        }
         private void OnEnable()
         {
-            control.Enable();
+            if (control == null)
+                return;
             control.Player.Interact.performed += OnInteract;
+            control.Player.Cancel.performed += OnCancel;
         }
         private void OnDisable()
         {
+            if (control == null)
+                return;
             control.Player.Interact.performed -= OnInteract;
-            control.Disable();
+            control.Player.Cancel.performed -= OnCancel;
+        }
+        private void OnCancel(InputAction.CallbackContext content)
+        {
+            if (InInteract && script.CanCancel())
+            {
+                script.Close();
+                InInteract = false;
+                playerMovement.enabled = true;
+                playerInventory.enabled = true;
+            }
         }
         private void OnInteract(InputAction.CallbackContext context)
         {
             if (InInteract)
             {
-                script.CloseDialog();
+                script.Close();
                 InInteract = false;
                 playerMovement.enabled = true;
                 playerInventory.enabled = true;
+                return;
             }
             Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing + offset, 0.2f, interactableObjectsLayer);
             if (col != null)

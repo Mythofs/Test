@@ -1,7 +1,6 @@
 Issues
 Inventory doesn't preserve across sessions
-PlayerInteract doesn't disable itself when in interact (minor)
--> proabably add a disable method to interactable and call that instead of interact twice
+NPC doesn't properly display each message in succession
 
 Features
 Add crafting system

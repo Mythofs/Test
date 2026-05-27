@@ -12,9 +12,10 @@ namespace Scripts.Interactables
         }
         public abstract void Interact();
         public abstract bool CanInteract();
-        public void CloseDialog()
+        public virtual void Close()
         {
             DialogBox.Instance.Enable(false);
         }
+        public virtual bool CanCancel() => true;
     }
 }

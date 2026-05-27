@@ -1,22 +1,25 @@
-﻿using Scripts.Items;
+﻿using Scripts.Crafting;
+using Scripts.Items;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Inventory
 {
-    [System.Serializable]
-    public class Inventory
+    public class Inventory : MonoBehaviour
     {
-        private readonly ItemDatabase itemDatabase;
-        public List<Item> ItemList { get; private set; }
+        [SerializeField] private ItemDatabase itemDatabase;
+        private List<Item> ItemList;
+        private Dictionary<ItemBase, int> DistinctItemList;
         public List<ItemBase> CraftableItems { get; private set; }
-        public int Capacity { get; private set; }
-        public Inventory(ItemDatabase itemdb, int capacity)
+        private int Capacity;
+        public static Inventory Instance { get; private set; }
+        private void Awake()
         {
+            Instance = this;
             ItemList = new();
+            DistinctItemList = new();
             CraftableItems = new();
-            Capacity = capacity;
-            itemDatabase = itemdb;
+            Capacity = 20;
         }
         //returns amount of item left over
         public Item AddItem(Item item)
@@ -88,26 +91,29 @@ namespace Scripts.Inventory
         private void UpdateCraftable()
         {
             foreach(ItemBase itemBase in itemDatabase.AllItems)
-            {
                 if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
                     CraftableItems.Add(itemBase);
-            }
+            CraftingManager.Instance.SetContent();
         }
         private bool CanCraft(ItemBase itemBase)
         {
-            if (itemBase.CraftingRecipe == null)
+            if (itemBase.CraftingRecipe.Count == 0)
                 return false;
-            int i = itemBase.CraftingRecipe.Count;
-            foreach(Item ingredient in itemBase.CraftingRecipe)
-            {
-                foreach (Item item in ItemList)
-                    if (ingredient.ItemBase.ItemName == item.ItemBase.ItemName)
-                        if (ingredient.Amount > item.Amount)
-                            return false;
-                        else
-                            i--;
-            }
-            return i == 0;
+            Dictionary<ItemBase, int> totalItems = new Dictionary<ItemBase, int>();
+            foreach (Item item in ItemList)
+                if (totalItems.ContainsKey(item.ItemBase))
+                    totalItems[item.ItemBase] += item.Amount;
+                else
+                    totalItems.Add(item.ItemBase, item.Amount);
+            foreach (Item ingredient in itemBase.CraftingRecipe)
+                if (totalItems.ContainsKey(ingredient.ItemBase))
+                {
+                    if (totalItems[ingredient.ItemBase] < ingredient.Amount)
+                        return false;
+                }
+                else
+                    return false;
+            return true;
         }
     }
 }

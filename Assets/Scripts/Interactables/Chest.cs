@@ -30,5 +30,6 @@ namespace Scripts.Interactables
         {
             return !opened;
         }
+        public override bool CanCancel() => false;
     }
 }

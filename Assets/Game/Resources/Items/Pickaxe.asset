@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf35ecec947feb447bcf1370dd1152dd, type: 3}
+  m_Name: Pickaxe
+  m_EditorClassIdentifier: Assembly-CSharp::Scripts.Items.ItemBase
+  itemName: Pickaxe
+  desc: A study tool used to mine materials
+  itemSprite: {fileID: 5807921338739458136, guid: 6d2eba6dfa811064dadec53a4551c58e, type: 3}
+  maxStack: 1
+  craftingRecipe:
+  - itemBase: {fileID: 11400000, guid: f39103c4017bb2f478db994b66c28e32, type: 2}
+    amount: 2
+  craftedAmount: 1

@@ -14,12 +14,16 @@ namespace Scripts.Interactables
         }
         public override void Interact()
         {
-            StartCoroutine(DialogBox.Instance.DisplayText(dialog[index]));
-            index++;
+            if (dialog.Length > index)
+            {
+                StartCoroutine(DialogBox.Instance.DisplayText(dialog[index]));
+                index++;
+            }
+            else
+                index = 0;
         }
-        public override bool CanInteract()
-        {
-            return true;
-        }
+        public override bool CanInteract() => true;
+        public override bool CanCancel() => false;
+
     }
 }

@@ -26,7 +26,6 @@ namespace Scripts.Player
         private Action<InputAction.CallbackContext> onCancelInput;
         private void Awake()
         {
-            control = new PlayerControl();
             animator = GetComponent<Animator>();
             onCancelInput = ctx =>
             {
@@ -38,17 +37,24 @@ namespace Scripts.Player
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
             portalsLayer = LayerMask.GetMask("Portals");
         }
+        private void Start()
+        {
+            control = PlayerInputManager.Instance.Control;
+            OnEnable();
+        }
         private void OnEnable()
         {
-            control.Enable();
+            if (control == null)
+                return;
             control.Player.Move.performed += OnMove;
             control.Player.Move.canceled += onCancelInput;
         }
         private void OnDisable()
         {
+            if (control == null)
+                return;
             control.Player.Move.performed -= OnMove;
             control.Player.Move.canceled -= onCancelInput;
-            control.Disable();
         }
         void Update()
         {

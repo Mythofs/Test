@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Scripts.Inventory;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Scripts.Player
@@ -13,20 +14,26 @@ namespace Scripts.Player
 		[SerializeField] Camera inventory;
 		[SerializeField] private PlayerMovement playerMovement;
 		[SerializeField] private PlayerInteract playerInteract;
-
 		private void Awake()
 		{
-			control = new PlayerControl();
 			InInventory = false;
 		}
-		private void OnEnable()
+        private void Start()
+        {
+            control = PlayerInputManager.Instance.Control;
+            OnEnable();
+        }
+        private void OnEnable()
 		{
-			control.Enable();
-			control.Player.Inventory.performed += OnInventory;
+            if (control == null)
+                return;
+            control.Player.Inventory.performed += OnInventory;
 		}
 		private void OnDisable()
 		{
-			control.Player.Inventory.performed -= OnInventory;
+            if (control == null)
+                return;
+            control.Player.Inventory.performed -= OnInventory;
 		}
 		private void OnInventory(InputAction.CallbackContext context)
 		{
@@ -40,6 +47,7 @@ namespace Scripts.Player
 					inventory.depth = 0;
 					playerMovement.enabled = false;
 					playerInteract.enabled = false;
+					InventoryManager.Instance.Open();
 				}
 				else
 				{
