@@ -52,10 +52,15 @@ namespace Scripts.Player
         {
             if (InInteract)
             {
-                script.Close();
-                InInteract = false;
-                playerMovement.enabled = true;
-                playerInventory.enabled = true;
+                if (script.RepeatedInteract())
+                    script.Interact();
+                else
+                {
+                    script.Close();
+                    InInteract = false;
+                    playerMovement.enabled = true;
+                    playerInventory.enabled = true;
+                }
                 return;
             }
             Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing + offset, 0.2f, interactableObjectsLayer);

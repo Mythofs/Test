@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Scripts.Portals
+namespace Scripts.SpecialTiles
 {
 	public class Portal : MonoBehaviour
 	{

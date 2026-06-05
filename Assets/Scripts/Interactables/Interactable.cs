@@ -17,5 +17,6 @@ namespace Scripts.Interactables
             DialogBox.Instance.Enable(false);
         }
         public virtual bool CanCancel() => true;
+        public virtual bool RepeatedInteract() => false;
     }
 }

@@ -7,6 +7,7 @@ namespace Scripts.Interactables
         [SerializeField] private Sprite sprite;
         [SerializeField] private string[] dialog;
         private int index = 0;
+        private bool repeat = true;
         protected override void Awake()
         {
             base.Awake();
@@ -20,10 +21,16 @@ namespace Scripts.Interactables
                 index++;
             }
             else
-                index = 0;
+                repeat = false;
+        }
+        public override void Close()
+        {
+            repeat = true;
+            index = 0;
+            base.Close();
         }
         public override bool CanInteract() => true;
         public override bool CanCancel() => false;
-
+        public override bool RepeatedInteract() => repeat;
     }
 }

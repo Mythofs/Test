@@ -1,6 +1,5 @@
 Issues
 Inventory doesn't preserve across sessions
-NPC doesn't properly display each message in succession
 
 Features
 Add crafting system

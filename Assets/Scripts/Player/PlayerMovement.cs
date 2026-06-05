@@ -1,4 +1,4 @@
-using Scripts.Portals;
+using Scripts.SpecialTiles;
 using System;
 using System.Collections;
 using UnityEngine;
