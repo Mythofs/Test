@@ -1,5 +1,0 @@
-Issues
-Inventory doesn't preserve across sessions
-
-Features
-Add crafting system
