@@ -12,20 +12,25 @@ namespace Scripts.Player
         private Vector2 input;
         private Vector2 buffer;
         private Vector2 offset = new(0f, -0.3f);
-        public static Vector2 Facing { get; private set; } //for PlayerInteract
+        public Vector2 Facing { get; private set; } //for PlayerInteract
         private bool isMoving;
         private bool isRunning;
         private readonly float speed = 3f;
         private readonly float runningSpeed = 4f;
-        [SerializeField] private float hitboxSize;
         private Animator animator;
         private LayerMask solidObjectsLayer;
         private LayerMask longGrassLayer;
         private LayerMask interactableObjectsLayer;
         private LayerMask portalsLayer;
         private Action<InputAction.CallbackContext> onCancelInput;
+        private readonly float hitboxSize = 0.4f;
+        public static PlayerMovement Instance;
         private void Awake()
         {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
             animator = GetComponent<Animator>();
             onCancelInput = ctx =>
             {
@@ -148,6 +153,12 @@ namespace Scripts.Player
         private float SnapX(float x)
         {
             return Mathf.Round(x - 0.5f) + 0.5f;
+        }
+        public void SetFacing(Vector2 direction)
+        {
+            Facing = direction;
+            animator.SetFloat("moveX", direction.x);
+            animator.SetFloat("moveY", direction.y);
         }
     }
 }

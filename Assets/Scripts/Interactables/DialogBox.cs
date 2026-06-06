@@ -8,6 +8,7 @@ namespace Scripts.Interactables
     {
         public static DialogBox Instance { get; private set; }
         private TextMeshProUGUI text;
+        public bool Displaying;
         private void Awake()
         {
             Instance = this;
@@ -17,6 +18,7 @@ namespace Scripts.Interactables
         }
         public IEnumerator DisplayText(string str)
         {
+            Displaying = true;
             text.text = "";
             Enable(true);
             foreach (char c in str)
@@ -24,6 +26,7 @@ namespace Scripts.Interactables
                 text.text += c;
                 yield return null;
             }
+            Displaying = false;
         }
         public void Enable(bool b)
         {

@@ -8,10 +8,11 @@ namespace Scripts.Interactables
     [RequireComponent(typeof(SpriteRenderer))]
     public class Chest : Interactable
     {
-        private bool opened = false;
         [SerializeField] private Sprite close;
         [SerializeField] private Sprite open;
         [SerializeField] private LootTable table;
+        private bool opened = false;
+        private bool cancel = false;
         protected override void Awake()
         {
             base.Awake();
@@ -25,11 +26,14 @@ namespace Scripts.Interactables
             Item leftover = InventoryManager.Instance.AddItem(item);
             spriteRenderer.sprite = open;
             StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
+            cancel = true;
         }
-        public override bool CanInteract()
+        public override bool CanInteract() => !opened;
+        public override bool CanCancel()
         {
-            return !opened;
+            if (DialogBox.Instance.Displaying)
+                return false;
+            return cancel;
         }
-        public override bool CanCancel() => false;
     }
 }

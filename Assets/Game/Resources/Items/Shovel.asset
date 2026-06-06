@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf35ecec947feb447bcf1370dd1152dd, type: 3}
-  m_Name: Pickaxe
+  m_Name: Shovel
   m_EditorClassIdentifier: Assembly-CSharp::Scripts.Items.ItemBase
-  itemName: Pickaxe
-  desc: A study tool used to mine materials
-  itemSprite: {fileID: 5807921338739458136, guid: 6d2eba6dfa811064dadec53a4551c58e, type: 3}
+  itemName: Shovel
+  desc: A tool used to dig up things
+  itemSprite: {fileID: 57591053551863209, guid: 6a299c36b29d9c040bc52a1491bf355b, type: 3}
   maxStack: 1
   craftingRecipe:
   - itemBase: {fileID: 11400000, guid: f39103c4017bb2f478db994b66c28e32, type: 2}
-    amount: 2
+    amount: 4
   - itemBase: {fileID: 11400000, guid: 924265ca2c7a81b4cb14f877b7031810, type: 2}
     amount: 1
   craftedAmount: 1

@@ -9,7 +9,6 @@ namespace Scripts.Inventory
     {
         [SerializeField] private ItemDatabase itemDatabase;
         private List<Item> ItemList;
-        private Dictionary<ItemBase, int> DistinctItemList;
         public List<ItemBase> CraftableItems { get; private set; }
         private int Capacity;
         public static Inventory Instance { get; private set; }
@@ -17,7 +16,6 @@ namespace Scripts.Inventory
         {
             Instance = this;
             ItemList = new();
-            DistinctItemList = new();
             CraftableItems = new();
             Capacity = 20;
         }
@@ -90,7 +88,7 @@ namespace Scripts.Inventory
         }
         private void UpdateCraftable()
         {
-            foreach(ItemBase itemBase in itemDatabase.AllItems)
+            foreach(ItemBase itemBase in itemDatabase.AllItems.Values)
                 if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
                     CraftableItems.Add(itemBase);
             CraftingManager.Instance.SetContent();
@@ -99,7 +97,7 @@ namespace Scripts.Inventory
         {
             if (itemBase.CraftingRecipe.Count == 0)
                 return false;
-            Dictionary<ItemBase, int> totalItems = new Dictionary<ItemBase, int>();
+            Dictionary<ItemBase, int> totalItems = new();
             foreach (Item item in ItemList)
                 if (totalItems.ContainsKey(item.ItemBase))
                     totalItems[item.ItemBase] += item.Amount;
@@ -115,5 +113,19 @@ namespace Scripts.Inventory
                     return false;
             return true;
         }
+        public void Save()
+        {
+            List<ItemSaveData> dataList = new();
+            foreach (Item item in ItemList)
+                dataList.Add(new ItemSaveData { itemName = item.ItemBase.ItemName, amount = item.Amount });
+            GameManager.Instance.saveData.inventoryData.items = dataList;
+        }
+        public void Load(InventoryData inventoryData)
+        {
+            ItemList.Clear();
+            foreach (ItemSaveData data in inventoryData.items)
+                ItemList.Add(new Item(itemDatabase.GetItemByName(data.itemName), data.amount));
+            UpdateCraftable();
+        }    
     }
 }

@@ -6,8 +6,8 @@ namespace Scripts.Player
 {
     public class PlayerInteract : MonoBehaviour
     {
-        [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private PlayerInventory playerInventory;
+        private PlayerMovement playerMovement;
+        private PlayerInventory playerInventory;
         private Vector2 offset = new(0f, -0.3f);
         private PlayerControl control;
         private LayerMask interactableObjectsLayer;
@@ -18,6 +18,8 @@ namespace Scripts.Player
         {
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
             InInteract = false;
+            playerMovement = GetComponent<PlayerMovement>();
+            playerInventory = GetComponent<PlayerInventory>();
         }
         private void Start()
         {
@@ -63,7 +65,7 @@ namespace Scripts.Player
                 }
                 return;
             }
-            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Facing + offset, 0.2f, interactableObjectsLayer);
+            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y) + PlayerMovement.Instance.Facing + offset, 0.2f, interactableObjectsLayer);
             if (col != null)
             {
                 sr = col.GetComponent<SpriteRenderer>();

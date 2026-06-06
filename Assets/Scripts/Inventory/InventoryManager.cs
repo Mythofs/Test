@@ -13,6 +13,8 @@ namespace Scripts.Inventory
         [SerializeField] private TextMeshProUGUI sideNameText;
         [SerializeField] private Image sideImage;
         [SerializeField] private TextMeshProUGUI sideDescText;
+        [SerializeField] private CanvasGroup inventoryCanvas;
+        [SerializeField] private CanvasGroup craftingCanvas;
         private InventorySlot selectedSlot;
         public static InventoryManager Instance { get; private set; }
         private void Awake()
@@ -83,7 +85,12 @@ namespace Scripts.Inventory
             if (selectedSlot != null)
                 EventSystem.current.SetSelectedGameObject(selectedSlot.gameObject);
             else if (inventorySlots.Count > 0)
+            {
                 EventSystem.current.SetSelectedGameObject(inventorySlots[0].gameObject);
+                selectedSlot = inventorySlots[0];
+            }
+            inventoryCanvas.interactable = true;
+            craftingCanvas.interactable = false;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Scripts.Inventory;
 using Scripts.Items;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace Scripts.Crafting
         [SerializeField] private List<Image> materialImages;
         [SerializeField] private List<TextMeshProUGUI> materialAmounts;
         [SerializeField] private TextMeshProUGUI mainItemDesc;
+        [SerializeField] private CanvasGroup inventoryCanvas;
+        [SerializeField] private CanvasGroup craftingCanvas;
         private CraftingSlot selectedSlot;
         private List<CraftingSlot> craftingSlots = new();
         public static CraftingManager Instance;
@@ -78,14 +81,15 @@ namespace Scripts.Crafting
         }
         public void Open()
         {
-            Debug.Log("Crafting Manager Opening ...");
             if (selectedSlot != null)
                 EventSystem.current.SetSelectedGameObject(selectedSlot.gameObject);
             else if (craftingSlots.Count > 0)
             {
                 EventSystem.current.SetSelectedGameObject(craftingSlots[0].gameObject);
-                Debug.Log("Crafting Manager Setting selected");
+                selectedSlot = craftingSlots[0];
             }
+            inventoryCanvas.interactable = false;
+            craftingCanvas.interactable = true;
         }
     }
 }

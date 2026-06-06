@@ -8,6 +8,7 @@ namespace Scripts.Interactables
         [SerializeField] private string[] dialog;
         private int index = 0;
         private bool repeat = true;
+        private bool cancel = false;
         protected override void Awake()
         {
             base.Awake();
@@ -19,18 +20,27 @@ namespace Scripts.Interactables
             {
                 StartCoroutine(DialogBox.Instance.DisplayText(dialog[index]));
                 index++;
+                if (index >= dialog.Length)
+                {
+                    repeat = false;
+                    cancel = true;
+                }
             }
-            else
-                repeat = false;
         }
         public override void Close()
         {
             repeat = true;
+            cancel = false;
             index = 0;
             base.Close();
         }
         public override bool CanInteract() => true;
-        public override bool CanCancel() => false;
+        public override bool CanCancel()
+        {
+            if (DialogBox.Instance.Displaying)
+                return false;
+            return cancel;
+        }
         public override bool RepeatedInteract() => repeat;
     }
 }

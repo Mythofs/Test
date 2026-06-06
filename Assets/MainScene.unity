@@ -7091,7 +7091,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a30c585690e0144b75200281244f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  hitboxSize: 0.4
 --- !u!95 &523324786
 Animator:
   serializedVersion: 7
@@ -7128,8 +7127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Player.PlayerInventory
   overworld: {fileID: 519420031}
   inventory: {fileID: 1346064069}
-  playerMovement: {fileID: 523324785}
-  playerInteract: {fileID: 523324788}
 --- !u!114 &523324788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7142,8 +7139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557da8998201ea940a0bc5324bc7f330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
-  playerMovement: {fileID: 523324785}
-  playerInventory: {fileID: 523324787}
 --- !u!114 &523324789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10510,6 +10505,8 @@ MonoBehaviour:
   - {fileID: 564398113}
   - {fileID: 765530784}
   mainItemDesc: {fileID: 697962695}
+  inventoryCanvas: {fileID: 1771833453}
+  craftingCanvas: {fileID: 1452714924}
 --- !u!1 &923434181
 GameObject:
   m_ObjectHideFlags: 0
@@ -10890,6 +10887,8 @@ MonoBehaviour:
   sideNameText: {fileID: 70440634}
   sideImage: {fileID: 1278765588}
   sideDescText: {fileID: 1512738140}
+  inventoryCanvas: {fileID: 1771833453}
+  craftingCanvas: {fileID: 1452714924}
 --- !u!114 &1077336312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12412,6 +12411,7 @@ GameObject:
   - component: {fileID: 1452714923}
   - component: {fileID: 1452714922}
   - component: {fileID: 1452714921}
+  - component: {fileID: 1452714924}
   m_Layer: 0
   m_Name: CraftingCanvas
   m_TagString: Untagged
@@ -12504,6 +12504,18 @@ Canvas:
   m_SortingLayerID: -1312573981
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1452714924
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452714919}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &1469517101 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4610751711046508696, guid: b854c02df7f93d249957aa105ffec838, type: 3}
@@ -12865,6 +12877,10 @@ PrefabInstance:
     - target: {fileID: 7525606037342781791, guid: ab349c8f6066d904bb023e54f025f233, type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7653992268012496941, guid: ab349c8f6066d904bb023e54f025f233, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8174421468817271887, guid: ab349c8f6066d904bb023e54f025f233, type: 3}
       propertyPath: m_Enabled
@@ -13291,6 +13307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e605710b2e2ee8f47b8f6f836aa751d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Player.DialogBox
+  Displaying: 0
 --- !u!1 &1754502697
 GameObject:
   m_ObjectHideFlags: 0
@@ -13605,6 +13622,7 @@ GameObject:
   - component: {fileID: 1771833452}
   - component: {fileID: 1771833451}
   - component: {fileID: 1771833450}
+  - component: {fileID: 1771833453}
   m_Layer: 0
   m_Name: InventoryCanvas
   m_TagString: Untagged
@@ -13698,6 +13716,18 @@ Canvas:
   m_SortingLayerID: -1312573981
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1771833453
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771833448}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1780576418
 PrefabInstance:
   m_ObjectHideFlags: 0

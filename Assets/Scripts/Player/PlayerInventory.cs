@@ -8,16 +8,18 @@ namespace Scripts.Player
 	{
 		private PlayerControl control;
 		public static bool InInventory { get; private set; }
-		private float delay = 0.2f;
+		private readonly float delay = 0.2f;
 		private float last = 0;
 		[SerializeField] Camera overworld;
 		[SerializeField] Camera inventory;
-		[SerializeField] private PlayerMovement playerMovement;
-		[SerializeField] private PlayerInteract playerInteract;
-		private void Awake()
+		private PlayerMovement playerMovement;
+		private PlayerInteract playerInteract;
+        private void Awake()
 		{
 			InInventory = false;
-		}
+            playerMovement = GetComponent<PlayerMovement>();
+            playerInteract = GetComponent<PlayerInteract>();
+        }
         private void Start()
         {
             control = PlayerInputManager.Instance.Control;
