@@ -4,7 +4,7 @@ namespace Scripts.Player
 {
 	public class PlayerController: MonoBehaviour
 	{
-        PlayerMovement movement;
+        private PlayerMovement movement;
         public static PlayerController Instance;
         private void Awake()
         {

@@ -126,6 +126,6 @@ namespace Scripts.Inventory
             foreach (ItemSaveData data in inventoryData.items)
                 ItemList.Add(new Item(itemDatabase.GetItemByName(data.itemName), data.amount));
             UpdateCraftable();
-        }    
+        }
     }
 }

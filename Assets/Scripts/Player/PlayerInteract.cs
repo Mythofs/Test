@@ -13,7 +13,7 @@ namespace Scripts.Player
         private LayerMask interactableObjectsLayer;
         private bool InInteract;
         private SpriteRenderer sr;
-        private Interactable script;
+        private IInteractable script;
         private void Awake()
         {
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
@@ -69,7 +69,7 @@ namespace Scripts.Player
             if (col != null)
             {
                 sr = col.GetComponent<SpriteRenderer>();
-                script = sr.GetComponent<Interactable>();
+                script = sr.GetComponent<IInteractable>();
                 if (script.CanInteract())
                 {
                     playerMovement.enabled = false;

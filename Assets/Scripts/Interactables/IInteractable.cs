@@ -2,7 +2,7 @@
 
 namespace Scripts.Interactables
 {
-    public abstract class Interactable : MonoBehaviour
+    public abstract class IInteractable: MonoBehaviour
     {
         protected SpriteRenderer spriteRenderer;
         protected virtual void Awake()

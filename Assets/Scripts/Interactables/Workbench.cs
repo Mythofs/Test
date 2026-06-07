@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Scripts.Interactables
 {
-	public class Workbench: Interactable
+	public class Workbench: IInteractable
 	{
         [SerializeField] private Camera craftingCamera;
 		[SerializeField] private Camera overworldCamera;

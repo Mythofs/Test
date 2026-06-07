@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Scripts.Interactables
 {
-    public class NPC : Interactable
+    public class NPC : IInteractable
     {
         [SerializeField] private Sprite sprite;
         [SerializeField] private string[] dialog;

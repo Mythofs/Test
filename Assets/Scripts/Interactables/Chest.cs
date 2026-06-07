@@ -1,18 +1,21 @@
 using Scripts.Inventory;
 using Scripts.Items;
 using Scripts.LootTables;
+using System.IO;
 using UnityEngine;
 
 namespace Scripts.Interactables
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class Chest : Interactable
+    public class Chest : IInteractable, ISaveable
     {
         [SerializeField] private Sprite close;
         [SerializeField] private Sprite open;
         [SerializeField] private LootTable table;
+        [SerializeField] public string id;
         private bool opened = false;
         private bool cancel = false;
+        public string Id => id;
         protected override void Awake()
         {
             base.Awake();
@@ -20,13 +23,16 @@ namespace Scripts.Interactables
         }
         public override void Interact()
         {
-            opened = !opened;
-            Item item = table.GetRandomItem();
-            int amount = item.Amount;
-            Item leftover = InventoryManager.Instance.AddItem(item);
-            spriteRenderer.sprite = open;
-            StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
-            cancel = true;
+            if (!opened)
+            {
+                opened = true;
+                Item item = table.GetRandomItem();
+                int amount = item.Amount;
+                Item leftover = InventoryManager.Instance.AddItem(item);
+                spriteRenderer.sprite = open;
+                StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
+                cancel = true;
+            }
         }
         public override bool CanInteract() => !opened;
         public override bool CanCancel()
@@ -35,5 +41,21 @@ namespace Scripts.Interactables
                 return false;
             return cancel;
         }
+        public string Serialize()
+        {
+            ChestData data = new();
+            data.opened = opened;
+            return JsonUtility.ToJson(data, true);
+        }
+        public void Deserialize(string data)
+        {
+            ChestData chestData = JsonUtility.FromJson<ChestData>(data);
+            opened = chestData.opened;
+            if (opened)
+                spriteRenderer.sprite = close;
+            else
+                spriteRenderer.sprite = open;
+        }
+        private class ChestData { public bool opened; }
     }
 }
