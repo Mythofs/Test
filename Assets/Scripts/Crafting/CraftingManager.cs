@@ -1,6 +1,5 @@
 ﻿using Scripts.Inventory;
 using Scripts.Items;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,6 +19,7 @@ namespace Scripts.Crafting
         [SerializeField] private TextMeshProUGUI mainItemDesc;
         [SerializeField] private CanvasGroup inventoryCanvas;
         [SerializeField] private CanvasGroup craftingCanvas;
+        [SerializeField] private CanvasGroup menuCanvas;
         private CraftingSlot selectedSlot;
         private List<CraftingSlot> craftingSlots = new();
         public static CraftingManager Instance;
@@ -38,7 +38,7 @@ namespace Scripts.Crafting
         {
             foreach (Transform slot in scroll.content)
                 Destroy(slot.gameObject);
-            foreach (ItemBase item in Scripts.Inventory.Inventory.Instance.CraftableItems)
+            foreach (ItemBase item in Inventory.Inventory.Instance.CraftableItems)
             {
                 CraftingSlot slot = Instantiate(itemPrefab, scroll.content);
                 slot.SetItem(item);
@@ -90,6 +90,7 @@ namespace Scripts.Crafting
             }
             inventoryCanvas.interactable = false;
             craftingCanvas.interactable = true;
+            menuCanvas.interactable = false;
         }
     }
 }

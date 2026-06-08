@@ -1,5 +1,6 @@
 ﻿using Scripts.Crafting;
 using Scripts.Items;
+using Scripts.Managers;
 using System.Collections.Generic;
 using UnityEngine;
 

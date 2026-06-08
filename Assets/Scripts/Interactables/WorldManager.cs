@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Scripts.Managers;
+using System.Linq;
 using UnityEngine;
 
 namespace Scripts.Interactables

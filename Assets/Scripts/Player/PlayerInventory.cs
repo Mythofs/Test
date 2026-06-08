@@ -1,4 +1,5 @@
-﻿using Scripts.Inventory;
+﻿using Scripts.Managers;
+using Scripts.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,19 +8,8 @@ namespace Scripts.Player
 	public class PlayerInventory : MonoBehaviour
 	{
 		private PlayerControl control;
-		public static bool InInventory { get; private set; }
-		private readonly float delay = 0.2f;
+		private readonly float delay = 0.1f;
 		private float last = 0;
-		[SerializeField] Camera overworld;
-		[SerializeField] Camera inventory;
-		private PlayerMovement playerMovement;
-		private PlayerInteract playerInteract;
-        private void Awake()
-		{
-			InInventory = false;
-            playerMovement = GetComponent<PlayerMovement>();
-            playerInteract = GetComponent<PlayerInteract>();
-        }
         private void Start()
         {
             control = PlayerInputManager.Instance.Control;
@@ -42,23 +32,11 @@ namespace Scripts.Player
 			if (last + delay < Time.time)
 			{
 				last = Time.time;
-				InInventory = !InInventory;
-				if (InInventory)
-				{
-					overworld.depth = -1;
-					inventory.depth = 0;
-					playerMovement.enabled = false;
-					playerInteract.enabled = false;
-					InventoryManager.Instance.Open();
-				}
+				if (GameManager.Instance.State == GameManager.GameState.Overworld)
+					GameManager.Instance.SetState(GameManager.GameState.Inventory);
 				else
-				{
-					overworld.depth = 0;
-					inventory.depth = -1;
-					playerMovement.enabled = true;
-					playerInteract.enabled = true;
-				}
-			}
-		}
+                    GameManager.Instance.SetState(GameManager.GameState.Overworld);
+            }
+        }
 	}
 }

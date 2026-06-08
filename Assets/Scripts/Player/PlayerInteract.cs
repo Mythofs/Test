@@ -1,3 +1,4 @@
+using Scripts.Managers;
 using Scripts.Interactables;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,8 +7,6 @@ namespace Scripts.Player
 {
     public class PlayerInteract : MonoBehaviour
     {
-        private PlayerMovement playerMovement;
-        private PlayerInventory playerInventory;
         private Vector2 offset = new(0f, -0.3f);
         private PlayerControl control;
         private LayerMask interactableObjectsLayer;
@@ -18,8 +17,6 @@ namespace Scripts.Player
         {
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
             InInteract = false;
-            playerMovement = GetComponent<PlayerMovement>();
-            playerInventory = GetComponent<PlayerInventory>();
         }
         private void Start()
         {
@@ -46,8 +43,7 @@ namespace Scripts.Player
             {
                 script.Close();
                 InInteract = false;
-                playerMovement.enabled = true;
-                playerInventory.enabled = true;
+                GameManager.Instance.SetState(GameManager.GameState.Overworld);
             }
         }
         private void OnInteract(InputAction.CallbackContext context)
@@ -60,8 +56,7 @@ namespace Scripts.Player
                 {
                     script.Close();
                     InInteract = false;
-                    playerMovement.enabled = true;
-                    playerInventory.enabled = true;
+                    GameManager.Instance.SetState(GameManager.GameState.Overworld);
                 }
                 return;
             }
@@ -72,8 +67,8 @@ namespace Scripts.Player
                 script = sr.GetComponent<IInteractable>();
                 if (script.CanInteract())
                 {
-                    playerMovement.enabled = false;
-                    playerInventory.enabled = false;
+                    GameManager.Instance.SetState(GameManager.GameState.Interact);
+
                     InInteract = true;
                     script.Interact();
                 }

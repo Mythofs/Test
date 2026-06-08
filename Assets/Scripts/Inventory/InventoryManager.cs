@@ -9,13 +9,14 @@ namespace Scripts.Inventory
 {
     public class InventoryManager : MonoBehaviour
     {
-        [SerializeField] private List<InventorySlot> inventorySlots;
         [SerializeField] private TextMeshProUGUI sideNameText;
         [SerializeField] private Image sideImage;
         [SerializeField] private TextMeshProUGUI sideDescText;
         [SerializeField] private CanvasGroup inventoryCanvas;
         [SerializeField] private CanvasGroup craftingCanvas;
+        [SerializeField] private Canvas menuCanavas;
         private InventorySlot selectedSlot;
+        private InventorySlot[] inventorySlots;
         public static InventoryManager Instance { get; private set; }
         private void Awake()
         {
@@ -26,6 +27,7 @@ namespace Scripts.Inventory
         }
         private void Start()
         {
+            inventorySlots = GetComponents<InventorySlot>();
             foreach (InventorySlot slot in inventorySlots)
                 slot.OnSlotSelected += slot => selectedSlot = slot;
             Display();
@@ -84,7 +86,7 @@ namespace Scripts.Inventory
         {
             if (selectedSlot != null)
                 EventSystem.current.SetSelectedGameObject(selectedSlot.gameObject);
-            else if (inventorySlots.Count > 0)
+            else if (inventorySlots.Length > 0)
             {
                 EventSystem.current.SetSelectedGameObject(inventorySlots[0].gameObject);
                 selectedSlot = inventorySlots[0];
