@@ -32,18 +32,7 @@ namespace Scripts.Inventory
                 slot.OnSlotSelected += slot => selectedSlot = slot;
             Display();
         }
-        public Item AddItem(Item item)
-        {
-            Item leftover = Inventory.Instance.AddItem(item);
-            Display();
-            return leftover;
-        }
-        public void RemoveItem(Item item)
-        {
-            Inventory.Instance.RemoveItem(item);
-            Display();
-        }
-        private void Display()
+        public void Display()
         {
             int index = 0;
             foreach (InventorySlot slot in inventorySlots)
@@ -84,6 +73,7 @@ namespace Scripts.Inventory
         }
         public void Open()
         {
+            Display();
             if (selectedSlot != null)
                 EventSystem.current.SetSelectedGameObject(selectedSlot.gameObject);
             else if (inventorySlots.Length > 0)

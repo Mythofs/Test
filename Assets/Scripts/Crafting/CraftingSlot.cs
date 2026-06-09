@@ -36,7 +36,7 @@ namespace Scripts.Crafting
         }
         public void OnSubmit(BaseEventData eventData)
         {
-            Debug.Log("Crafting " + itemBase.ItemName);
+            Inventory.Inventory.Instance.Craft(itemBase);
         }
         public void SetItem(ItemBase item)
         {

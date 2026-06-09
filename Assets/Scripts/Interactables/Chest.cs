@@ -1,7 +1,6 @@
 using Scripts.Inventory;
 using Scripts.Items;
 using Scripts.LootTables;
-using System.IO;
 using UnityEngine;
 
 namespace Scripts.Interactables
@@ -28,7 +27,7 @@ namespace Scripts.Interactables
                 opened = true;
                 Item item = table.GetRandomItem();
                 int amount = item.Amount;
-                Item leftover = InventoryManager.Instance.AddItem(item);
+                Item leftover = Inventory.Inventory.Instance.AddItem(item);
                 spriteRenderer.sprite = open;
                 StartCoroutine(DialogBox.Instance.DisplayText("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
                 cancel = true;

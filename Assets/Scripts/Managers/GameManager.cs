@@ -3,6 +3,7 @@ using Scripts.Inventory;
 using Scripts.Menu;
 using Scripts.Player;
 using Scripts.Saving;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Managers
@@ -15,7 +16,6 @@ namespace Scripts.Managers
         [SerializeField] private PlayerMenu menu;
         [SerializeField] private Camera overworldCam;
         [SerializeField] private Camera inventoryCam;
-        [SerializeField] private Canvas menuCanvas;
         public static GameManager Instance { get; private set; }
         public SaveData saveData = new();
         public GameState State { get; private set; }
@@ -32,7 +32,7 @@ namespace Scripts.Managers
             //stores data in savedata
             PlayerController.Instance.Save();
             WorldManager.Instance.Save();
-            Scripts.Inventory.Inventory.Instance.Save();
+            Inventory.Inventory.Instance.Save();
             //actually saves the data
             SaveManager.Instance.Save(saveData);
         }
@@ -41,50 +41,68 @@ namespace Scripts.Managers
             saveData = SaveManager.Instance.Load();
             PlayerController.Instance.Load(saveData.playerData);
             WorldManager.Instance.Load(saveData.worldData);
-            Scripts.Inventory.Inventory.Instance.Load(saveData.inventoryData);
+            Inventory.Inventory.Instance.Load(saveData.inventoryData);
         }
         public void SetState(GameState state)
         {
             State = state;
-            if(state == GameState.Overworld)
-            {
-                movement.enabled = true;
-                inventory.enabled = true;
-                interact.enabled = true;
-                menu.enabled = true;
-                overworldCam.depth = 0;
-                inventoryCam.depth = -1;
-                menuCanvas.enabled = false;
-            }
-            else if(state == GameState.Inventory)
-            {
-                movement.enabled = false;
-                inventory.enabled = true;
-                interact.enabled = false;
-                menu.enabled = false;
-                overworldCam.depth = -1;
-                inventoryCam.depth = 0;
-                menuCanvas.enabled = false;
+            GameStateConfig config = stateConfig[state];
+            movement.enabled = config.movementEnabled;
+            inventory.enabled = config.inventoryEnabled;
+            interact.enabled = config.interactEnabled;
+            menu.enabled = config.menuEnabled;
+            overworldCam.depth = config.overworldCamDepth;
+            inventoryCam.depth = config.inventoryCamDepth;
+            if (state == GameState.Inventory)
                 InventoryManager.Instance.Open();
-            }
-            else if(state == GameState.Interact)
-            {
-                movement.enabled = false;
-                inventory.enabled = false;
-                interact.enabled = true;
-                menu.enabled = false;
-                menuCanvas.enabled = false;
-            }
-            else if(state == GameState.Menu)
-            {
-                movement.enabled = false;
-                inventory.enabled = false;
-                interact.enabled = false;
-                menu.enabled = false;
-                menuCanvas.enabled = true;
+            else if (state == GameState.Menu)
                 MenuManager.Instance.Open();
-            }
         }
         public enum GameState { Overworld, Interact, Inventory, Menu }
+        private readonly Dictionary<GameState, GameStateConfig> stateConfig = new()
+        {
+            [GameState.Overworld] = new GameStateConfig()
+            {
+                movementEnabled = true,
+                inventoryEnabled = true,
+                interactEnabled = true,
+                menuEnabled = true,
+                overworldCamDepth = 0,
+                inventoryCamDepth = -1
+            },
+            [GameState.Inventory] = new GameStateConfig()
+            {
+                movementEnabled = false,
+                inventoryEnabled = true,
+                interactEnabled = false,
+                menuEnabled = false,
+                overworldCamDepth = -1,
+                inventoryCamDepth = 0
+            },
+            [GameState.Interact] = new GameStateConfig()
+            {
+                movementEnabled = false,
+                inventoryEnabled = false,
+                interactEnabled = true,
+                menuEnabled = false,
+            },
+            [GameState.Menu] = new GameStateConfig()
+            {
+                movementEnabled = false,
+                inventoryEnabled = false,
+                interactEnabled = false,
+                menuEnabled = true,
+            },
+        };
+        [System.Serializable]
+        public struct GameStateConfig
+        {
+            public bool movementEnabled;
+            public bool inventoryEnabled;
+            public bool interactEnabled;
+            public bool menuEnabled;
+            public int overworldCamDepth;
+            public int inventoryCamDepth;
+        }
     }
 }

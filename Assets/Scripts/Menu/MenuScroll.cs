@@ -8,13 +8,14 @@ namespace Scripts.Menu
 	{
 		[SerializeField] ScrollRect scroll;
 		private RectTransform[] slots;
+		private RectTransform selected;
 		private void Awake()
 		{
 			slots = scroll.content.GetComponents<RectTransform>();
 		}
 		private void Update()
 		{
-			Debug.Log(scroll.velocity);
+
 		}
 	}
 }
