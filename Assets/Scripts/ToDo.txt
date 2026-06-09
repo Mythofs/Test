@@ -1,0 +1,13 @@
+Issues
+Crafting scrolling doesn't work
+
+Features
+Actually craft the item
+Create the input that triggers saving
+Actually draw the real sprites
+Add encoding to the save files
+Create the battle system, idk even know what it should look like tbh card based or smth?
+Worldbuild?!?!
+
+Refactor
+make ui manager handle menu ui

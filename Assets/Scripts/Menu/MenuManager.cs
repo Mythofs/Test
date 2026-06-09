@@ -9,7 +9,7 @@ namespace Scripts.Menu
     public class MenuManager : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText;
-        private CanvasGroup menuCanvas;
+        private CanvasGroup menuCanvasGroup;
         private MenuSlot selectedSlot;
         private MenuSlot[] menuSlots;
         public static MenuManager Instance;
@@ -19,8 +19,7 @@ namespace Scripts.Menu
                 Instance = this;
             else
                 Destroy(this);
-            menuCanvas = GetComponent<CanvasGroup>();
-            menuCanvas.enabled = false;
+            menuCanvasGroup = GetComponent<CanvasGroup>();
             menuSlots = GetComponentsInChildren<MenuSlot>();
             foreach (MenuSlot slot in menuSlots)
                 slot.OnSlotSelected += slot => selectedSlot = slot;
@@ -38,8 +37,8 @@ namespace Scripts.Menu
                 EventSystem.current.SetSelectedGameObject(menuSlots[0].gameObject);
                 selectedSlot = menuSlots[0];
             }
-            UIManager.Instance.SetCanvas(menuCanvas);
-            menuCanvas.enabled = true;
+            UIManager.Instance.SetCanvas(menuCanvasGroup);
+
         }
     }
 }

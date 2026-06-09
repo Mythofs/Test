@@ -51,10 +51,17 @@ namespace Scripts.Managers
             inventory.enabled = config.inventoryEnabled;
             interact.enabled = config.interactEnabled;
             menu.enabled = config.menuEnabled;
-            overworldCam.depth = config.overworldCamDepth;
-            inventoryCam.depth = config.inventoryCamDepth;
+            if(state == GameState.Overworld)
+            {
+                overworldCam.depth = 0;
+                inventoryCam.depth = -1;
+            }
             if (state == GameState.Inventory)
+            {
+                overworldCam.depth = -1;
+                inventoryCam.depth = 0;
                 InventoryManager.Instance.Open();
+            }
             else if (state == GameState.Menu)
                 MenuManager.Instance.Open();
         }
@@ -67,8 +74,6 @@ namespace Scripts.Managers
                 inventoryEnabled = true,
                 interactEnabled = true,
                 menuEnabled = true,
-                overworldCamDepth = 0,
-                inventoryCamDepth = -1
             },
             [GameState.Inventory] = new GameStateConfig()
             {
@@ -76,8 +81,6 @@ namespace Scripts.Managers
                 inventoryEnabled = true,
                 interactEnabled = false,
                 menuEnabled = false,
-                overworldCamDepth = -1,
-                inventoryCamDepth = 0
             },
             [GameState.Interact] = new GameStateConfig()
             {
@@ -101,8 +104,6 @@ namespace Scripts.Managers
             public bool inventoryEnabled;
             public bool interactEnabled;
             public bool menuEnabled;
-            public int overworldCamDepth;
-            public int inventoryCamDepth;
         }
     }
 }

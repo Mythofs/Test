@@ -12,9 +12,6 @@ namespace Scripts.Inventory
         [SerializeField] private TextMeshProUGUI sideNameText;
         [SerializeField] private Image sideImage;
         [SerializeField] private TextMeshProUGUI sideDescText;
-        [SerializeField] private CanvasGroup inventoryCanvas;
-        [SerializeField] private CanvasGroup craftingCanvas;
-        [SerializeField] private Canvas menuCanavas;
         private InventorySlot selectedSlot;
         private InventorySlot[] inventorySlots;
         public static InventoryManager Instance { get; private set; }
@@ -27,7 +24,7 @@ namespace Scripts.Inventory
         }
         private void Start()
         {
-            inventorySlots = GetComponents<InventorySlot>();
+            inventorySlots = GetComponentsInChildren<InventorySlot>();
             foreach (InventorySlot slot in inventorySlots)
                 slot.OnSlotSelected += slot => selectedSlot = slot;
             Display();
@@ -81,8 +78,6 @@ namespace Scripts.Inventory
                 EventSystem.current.SetSelectedGameObject(inventorySlots[0].gameObject);
                 selectedSlot = inventorySlots[0];
             }
-            inventoryCanvas.interactable = true;
-            craftingCanvas.interactable = false;
         }
     }
 }

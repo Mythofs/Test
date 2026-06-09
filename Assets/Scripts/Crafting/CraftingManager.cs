@@ -17,9 +17,6 @@ namespace Scripts.Crafting
         [SerializeField] private List<Image> materialImages;
         [SerializeField] private List<TextMeshProUGUI> materialAmounts;
         [SerializeField] private TextMeshProUGUI mainItemDesc;
-        [SerializeField] private CanvasGroup inventoryCanvas;
-        [SerializeField] private CanvasGroup craftingCanvas;
-        [SerializeField] private CanvasGroup menuCanvas;
         private CraftingSlot selectedSlot;
         private List<CraftingSlot> craftingSlots = new();
         public static CraftingManager Instance;
@@ -88,9 +85,6 @@ namespace Scripts.Crafting
                 EventSystem.current.SetSelectedGameObject(craftingSlots[0].gameObject);
                 selectedSlot = craftingSlots[0];
             }
-            inventoryCanvas.interactable = false;
-            craftingCanvas.interactable = true;
-            menuCanvas.interactable = false;
         }
     }
 }

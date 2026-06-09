@@ -23,9 +23,9 @@ namespace Scripts.Inventory
             CraftableItems = new();
             Capacity = 20;
         }
-        //probably should just change to have only one return statement at the end
         public Item AddItem(Item item)
         {
+            int origAmount = item.Amount;
             foreach (var item1 in ItemList)
                 if (item1.ItemBase == item.ItemBase && item.Amount + item1.Amount > item.ItemBase.MaxStack)
                 {
@@ -37,38 +37,44 @@ namespace Scripts.Inventory
                         item.SetAmount(item.Amount - item.ItemBase.MaxStack);
                     }
                     if (ItemList.Count < Capacity)
-                        ItemList.Add(item);
-                    else
                     {
-                        UpdateCraftable();
-                        InventoryManager.Instance.Display();
-                        return item;
+                        ItemList.Add(new Item(item.ItemBase, item.Amount));
+                        item.SetAmount(0);
                     }
+                    break;
                 }
-            if (ItemList.Count == Capacity)
+            if (ItemList.Count < Capacity && item.Amount > 0)
             {
-                UpdateCraftable();
-                InventoryManager.Instance.Display();
-
-                return item;
-            }
-            if (item.Amount > item.ItemBase.MaxStack)
-                while (item.Amount > item.ItemBase.MaxStack && ItemList.Count < Capacity)
+                if (item.Amount > item.ItemBase.MaxStack)
+                    while (item.Amount > item.ItemBase.MaxStack && ItemList.Count < Capacity)
+                    {
+                        ItemList.Add(new Item(item.ItemBase, item.ItemBase.MaxStack));
+                        item.SetAmount(item.Amount - item.ItemBase.MaxStack);
+                    }
+                if (ItemList.Count < Capacity)
                 {
-                    ItemList.Add(new Item(item.ItemBase, item.ItemBase.MaxStack));
-                    item.SetAmount(item.Amount - item.ItemBase.MaxStack);
+                    ItemList.Add(new Item(item.ItemBase, item.Amount));
+                    item.SetAmount(0);
                 }
-            if (ItemList.Count < Capacity)
-                ItemList.Add(item);
-            else
-            {
-                UpdateCraftable();
-                InventoryManager.Instance.Display();
-                return item;
             }
             UpdateCraftable();
             InventoryManager.Instance.Display();
-            return new Item(item.ItemBase, 0);
+            if (ItemList.Count == Capacity && item.Amount > 0)
+            {
+                if (totalItems.ContainsKey(item.ItemBase))
+                    totalItems[item.ItemBase] += origAmount - item.Amount;
+                else
+                    totalItems.Add(item.ItemBase, origAmount - item.Amount);
+                return item;
+            }
+            else
+            {
+                if (totalItems.ContainsKey(item.ItemBase))
+                    totalItems[item.ItemBase] += origAmount;
+                else
+                    totalItems.Add(item.ItemBase, origAmount);
+                return new Item(item.ItemBase, 0);
+            }
         }
         public void RemoveItem(Item item)
         {
@@ -97,12 +103,6 @@ namespace Scripts.Inventory
         }
         private void UpdateCraftable()
         {
-            //updates total items, probably change later, b/c this is inefficient, should just change in additem
-            foreach (Item item in ItemList)
-                if (totalItems.ContainsKey(item.ItemBase))
-                    totalItems[item.ItemBase] += item.Amount;
-                else
-                    totalItems.Add(item.ItemBase, item.Amount);
             foreach (ItemBase itemBase in itemDatabase.AllItems.Values)
                 if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
                     CraftableItems.Add(itemBase);
@@ -133,7 +133,10 @@ namespace Scripts.Inventory
         {
             ItemList.Clear();
             foreach (ItemSaveData data in inventoryData.items)
+            {
+                totalItems[itemDatabase.GetItemByName(data.itemName)] += data.amount;
                 ItemList.Add(new Item(itemDatabase.GetItemByName(data.itemName), data.amount));
+            }
             UpdateCraftable();
         }
         public void Craft(ItemBase item)
@@ -153,7 +156,7 @@ namespace Scripts.Inventory
                     RemoveItem(ingredient);
                 AddItem(new Item(item, item.CraftedAmount));
             }
-            Display();
+            InventoryManager.Instance.Display();
         }
     }
 }

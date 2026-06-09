@@ -68,11 +68,11 @@ namespace Scripts.Player
                 if (script.CanInteract())
                 {
                     GameManager.Instance.SetState(GameManager.GameState.Interact);
-
                     InInteract = true;
                     script.Interact();
                 }
             }
+            GameManager.Instance.SetState(GameManager.GameState.Overworld);
         }
     }
 }
