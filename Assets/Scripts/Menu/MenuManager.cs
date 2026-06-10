@@ -9,7 +9,8 @@ namespace Scripts.Menu
     public class MenuManager : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText;
-        private CanvasGroup menuCanvasGroup;
+        [SerializeField] private Canvas menuCanvas;
+        [SerializeField] private CanvasGroup menuCanvasGroup;
         private MenuSlot selectedSlot;
         private MenuSlot[] menuSlots;
         public static MenuManager Instance;
@@ -23,6 +24,7 @@ namespace Scripts.Menu
             menuSlots = GetComponentsInChildren<MenuSlot>();
             foreach (MenuSlot slot in menuSlots)
                 slot.OnSlotSelected += slot => selectedSlot = slot;
+            menuCanvas.enabled = false;
         }
         public void SetText(string text)
         {
@@ -38,6 +40,11 @@ namespace Scripts.Menu
                 selectedSlot = menuSlots[0];
             }
             UIManager.Instance.SetCanvas(menuCanvasGroup);
+            menuCanvas.enabled = true;
+        }
+        public void Close()
+        {
+            menuCanvas.enabled = false;
         }
     }
 }

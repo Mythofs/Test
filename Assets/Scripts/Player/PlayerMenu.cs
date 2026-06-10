@@ -1,4 +1,5 @@
 ﻿using Scripts.Managers;
+using Scripts.Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,6 @@ namespace Scripts.Player
 {
 	public class PlayerMenu : MonoBehaviour
 	{
-		[SerializeField] private Canvas menuCanvas;
 		private PlayerControl control;
 		private readonly float delay = 0.1f;
 		private float last = 0;
@@ -35,12 +35,11 @@ namespace Scripts.Player
 				if (GameManager.Instance.State == GameManager.GameState.Overworld)
 				{
 					GameManager.Instance.SetState(GameManager.GameState.Menu);
-					menuCanvas.enabled = true;
 				}
 				else
 				{
 					GameManager.Instance.SetState(GameManager.GameState.Overworld);
-					menuCanvas.enabled = false;
+					MenuManager.Instance.Close();
 				}
 			}
 		}

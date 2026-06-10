@@ -25,6 +25,9 @@ namespace Scripts.Managers
                 Instance = this;
             else
                 Destroy(this);
+        }
+        private void Start()
+        {
             SetState(GameState.Overworld);
         }
         public void Save()
@@ -55,6 +58,7 @@ namespace Scripts.Managers
             {
                 overworldCam.depth = 0;
                 inventoryCam.depth = -1;
+                UIManager.Instance.DisableCanvas();
             }
             if (state == GameState.Inventory)
             {

@@ -1,12 +1,14 @@
 Issues
-Crafting/menu scrolling doesn't work
+Crafting scrolling doesn't work
 
 Features
-Actually craft the item
-Create the input that triggers saving
+Actually craft the item (untested, maybe works)
+Create the input that triggers saving (submit doesn't work)
 Actually draw the real sprites
 Add encoding to the save files (low priority)
 Create the battle system, idk even know what it should look like tbh card based or smth?
 Worldbuild?!?!
+Implement pixel perfect cameras (after/during drawing the sprites)
+Add ysorting
 
 Refactor

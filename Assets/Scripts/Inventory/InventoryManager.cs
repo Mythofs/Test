@@ -1,4 +1,5 @@
 using Scripts.Items;
+using Scripts.Managers;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Scripts.Inventory
         [SerializeField] private TextMeshProUGUI sideNameText;
         [SerializeField] private Image sideImage;
         [SerializeField] private TextMeshProUGUI sideDescText;
+        [SerializeField] private CanvasGroup inventoryCanvas;
         private InventorySlot selectedSlot;
         private InventorySlot[] inventorySlots;
         public static InventoryManager Instance { get; private set; }
@@ -78,6 +80,7 @@ namespace Scripts.Inventory
                 EventSystem.current.SetSelectedGameObject(inventorySlots[0].gameObject);
                 selectedSlot = inventorySlots[0];
             }
+            UIManager.Instance.SetCanvas(inventoryCanvas);
         }
     }
 }

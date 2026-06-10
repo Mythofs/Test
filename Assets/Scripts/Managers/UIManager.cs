@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Scripts.Managers
 {
@@ -18,9 +19,15 @@ namespace Scripts.Managers
         {
             foreach (CanvasGroup group in canvases)
                 if (canvas == group)
-                    canvas.interactable = false;
-                else
                     canvas.interactable = true;
+                else
+                    canvas.interactable = false;
+        }
+        public void DisableCanvas()
+        {
+            foreach (CanvasGroup group in canvases)
+                group.interactable = false;
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }
