@@ -38,7 +38,6 @@ namespace Scripts.Menu
                 selectedSlot = menuSlots[0];
             }
             UIManager.Instance.SetCanvas(menuCanvasGroup);
-
         }
     }
 }

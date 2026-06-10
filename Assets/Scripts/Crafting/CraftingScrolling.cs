@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Scripts.Crafting
 {
-    public class CraftingScrolling : MonoBehaviour
+    public class CraftingScroll : MonoBehaviour
     {
         [SerializeField] private ScrollRect scroll;
         void Update()
