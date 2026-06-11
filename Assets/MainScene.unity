@@ -1184,16 +1184,16 @@ MonoBehaviour:
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: 0}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 0}
-  m_MiddleClickAction: {fileID: 0}
-  m_RightClickAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 0}
-  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
@@ -1210,7 +1210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
-  m_FirstSelected: {fileID: 1017449847}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &105461278
@@ -7067,10 +7067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9c3c65a4a8cd048a25e0bcffe5bbab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scripts.GameManager.GameManager
-  movement: {fileID: 523324785}
-  inventory: {fileID: 523324787}
-  interact: {fileID: 523324788}
-  menu: {fileID: 523324790}
   overworldCam: {fileID: 519420031}
   inventoryCam: {fileID: 1346064069}
   saveData:
@@ -7249,6 +7245,7 @@ GameObject:
   - component: {fileID: 523324787}
   - component: {fileID: 523324788}
   - component: {fileID: 523324790}
+  - component: {fileID: 523324791}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7415,6 +7412,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ddeca7846c7d14dbc2f00253c8e109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scripts.Player.PlayerMenu
+--- !u!114 &523324791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523324781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca433222f550e924a8d423c0b46edbf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scripts.Interactables.YSort
 --- !u!224 &531019634 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4610751711046508696, guid: b854c02df7f93d249957aa105ffec838, type: 3}
@@ -10333,6 +10342,7 @@ GameObject:
   - component: {fileID: 791118524}
   - component: {fileID: 791118525}
   - component: {fileID: 791118526}
+  - component: {fileID: 791118527}
   m_Layer: 10
   m_Name: Red Man NPC
   m_TagString: Untagged
@@ -10476,6 +10486,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &791118527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791118522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca433222f550e924a8d423c0b46edbf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scripts.Interactables.YSort
 --- !u!224 &819269423 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4610751711046508696, guid: b854c02df7f93d249957aa105ffec838, type: 3}
@@ -11472,11 +11494,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 1.25}
   m_SizeDelta: {x: 4, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1017449847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 657269469515623162, guid: b854c02df7f93d249957aa105ffec838, type: 3}
-  m_PrefabInstance: {fileID: 720998196}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1017449848 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4610751711046508696, guid: b854c02df7f93d249957aa105ffec838, type: 3}
@@ -14001,7 +14018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e605710b2e2ee8f47b8f6f836aa751d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Player.DialogBox
-  Displaying: 0
 --- !u!1 &1754502697
 GameObject:
   m_ObjectHideFlags: 0

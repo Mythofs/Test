@@ -9,6 +9,7 @@ namespace Scripts.Interactables
 		[SerializeField] private Camera overworldCamera;
         public override void Interact()
         {
+            Interacting = true;
             craftingCamera.depth = 0;
             overworldCamera.depth = -1;
             CraftingManager.Instance.Open();
@@ -19,6 +20,7 @@ namespace Scripts.Interactables
             base.Close();
             craftingCamera.depth = -1;
             overworldCamera.depth = 0;
+            Interacting = false;
         }
 	}
 }

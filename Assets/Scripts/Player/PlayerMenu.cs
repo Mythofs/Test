@@ -29,7 +29,7 @@ namespace Scripts.Player
 		}
 		private void OnMenu(InputAction.CallbackContext context)
 		{
-			if(last + delay <Time.time)
+			if(last + delay < Time.time && !GameManager.Instance.StateChangedThisFrame)
 			{
 				last = Time.time;
 				if (GameManager.Instance.State == GameManager.GameState.Overworld)

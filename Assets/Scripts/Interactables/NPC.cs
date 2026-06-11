@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Scripts.Interactables
@@ -18,14 +19,20 @@ namespace Scripts.Interactables
         {
             if (dialog.Length > index)
             {
-                StartCoroutine(DialogBox.Instance.DisplayText(dialog[index]));
                 index++;
                 if (index >= dialog.Length)
                 {
                     repeat = false;
                     cancel = true;
                 }
+                StartCoroutine(Display(dialog[index-1]));
             }
+        }
+        private IEnumerator Display(string text)
+        {
+            Interacting = true;
+            yield return StartCoroutine(DialogBox.Instance.DisplayText(text));
+            Interacting = false;
         }
         public override void Close()
         {
@@ -37,7 +44,7 @@ namespace Scripts.Interactables
         public override bool CanInteract() => true;
         public override bool CanCancel()
         {
-            if (DialogBox.Instance.Displaying)
+            if (Interacting)
                 return false;
             return cancel;
         }

@@ -12,7 +12,7 @@ namespace Scripts.Player
         private Vector2 input;
         private Vector2 buffer;
         private Vector2 offset = new(0f, -0.3f);
-        public Vector2 Facing { get; private set; } //for PlayerInteract
+        public Vector2 Facing { get; private set; }
         private bool isMoving;
         private bool isRunning;
         private readonly float speed = 3f;

@@ -48,10 +48,14 @@ namespace Scripts.Player
         }
         private void OnInteract(InputAction.CallbackContext context)
         {
+            if (script != null && script.GetInteracting()) return;
             if (InInteract)
             {
                 if (script.RepeatedInteract())
+                {
+                    GameManager.Instance.SetState(GameManager.GameState.Interact);
                     script.Interact();
+                }
                 else
                 {
                     script.Close();
@@ -72,7 +76,8 @@ namespace Scripts.Player
                     script.Interact();
                 }
             }
-            GameManager.Instance.SetState(GameManager.GameState.Overworld);
+            else
+                GameManager.Instance.SetState(GameManager.GameState.Overworld);
         }
     }
 }

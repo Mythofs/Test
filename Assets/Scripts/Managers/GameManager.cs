@@ -5,20 +5,19 @@ using Scripts.Player;
 using Scripts.Saving;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private PlayerMovement movement;
-        [SerializeField] private PlayerInventory inventory;
-        [SerializeField] private PlayerInteract interact;
-        [SerializeField] private PlayerMenu menu;
         [SerializeField] private Camera overworldCam;
         [SerializeField] private Camera inventoryCam;
         public static GameManager Instance { get; private set; }
         public SaveData saveData = new();
         public GameState State { get; private set; }
+        public bool StateChangedThisFrame { get; private set; }
+        private PlayerControl control;
         private void Awake()
         {
             if (Instance == null)
@@ -28,7 +27,12 @@ namespace Scripts.Managers
         }
         private void Start()
         {
+            control = Player.PlayerInputManager.Instance.Control;
             SetState(GameState.Overworld);
+        }
+        private void LateUpdate()
+        {
+            StateChangedThisFrame = false;
         }
         public void Save()
         {
@@ -50,11 +54,13 @@ namespace Scripts.Managers
         {
             State = state;
             GameStateConfig config = stateConfig[state];
-            movement.enabled = config.movementEnabled;
-            inventory.enabled = config.inventoryEnabled;
-            interact.enabled = config.interactEnabled;
-            menu.enabled = config.menuEnabled;
-            if(state == GameState.Overworld)
+            SetEnabled(control.Player.Move, config.movementEnabled);
+            SetEnabled(control.Player.Inventory, config.inventoryEnabled);
+            SetEnabled(control.Player.Interact, config.interactEnabled);
+            SetEnabled(control.Player.Menu, config.menuEnabled);
+            if (config.UIEnabled) control.UI.Enable();
+            else control.UI.Disable();
+            if (state == GameState.Overworld)
             {
                 overworldCam.depth = 0;
                 inventoryCam.depth = -1;
@@ -68,6 +74,12 @@ namespace Scripts.Managers
             }
             else if (state == GameState.Menu)
                 MenuManager.Instance.Open();
+            StateChangedThisFrame = true;
+        }
+        private void SetEnabled(InputAction action, bool enabled)
+        {
+            if (enabled) action.Enable();
+            else action.Disable();
         }
         public enum GameState { Overworld, Interact, Inventory, Menu }
         private readonly Dictionary<GameState, GameStateConfig> stateConfig = new()
@@ -78,6 +90,7 @@ namespace Scripts.Managers
                 inventoryEnabled = true,
                 interactEnabled = true,
                 menuEnabled = true,
+                UIEnabled = false,
             },
             [GameState.Inventory] = new GameStateConfig()
             {
@@ -85,6 +98,7 @@ namespace Scripts.Managers
                 inventoryEnabled = true,
                 interactEnabled = false,
                 menuEnabled = false,
+                UIEnabled = true,
             },
             [GameState.Interact] = new GameStateConfig()
             {
@@ -92,6 +106,7 @@ namespace Scripts.Managers
                 inventoryEnabled = false,
                 interactEnabled = true,
                 menuEnabled = false,
+                UIEnabled = true,
             },
             [GameState.Menu] = new GameStateConfig()
             {
@@ -99,6 +114,7 @@ namespace Scripts.Managers
                 inventoryEnabled = false,
                 interactEnabled = false,
                 menuEnabled = true,
+                UIEnabled = true,
             },
         };
         [System.Serializable]
@@ -108,6 +124,7 @@ namespace Scripts.Managers
             public bool inventoryEnabled;
             public bool interactEnabled;
             public bool menuEnabled;
+            public bool UIEnabled;
         }
     }
 }
