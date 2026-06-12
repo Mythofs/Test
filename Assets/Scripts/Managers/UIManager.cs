@@ -19,9 +19,10 @@ namespace Scripts.Managers
         {
             foreach (CanvasGroup group in canvases)
                 if (canvas == group)
-                    canvas.interactable = true;
+                    group.interactable = true;
                 else
-                    canvas.interactable = false;
+                    group.interactable = false;
+            Debug.Log(canvas);
         }
         public void DisableCanvas()
         {

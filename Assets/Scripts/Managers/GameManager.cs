@@ -27,6 +27,7 @@ namespace Scripts.Managers
         }
         private void Start()
         {
+            Load();
             control = Player.PlayerInputManager.Instance.Control;
             SetState(GameState.Overworld);
         }
@@ -46,9 +47,12 @@ namespace Scripts.Managers
         public void Load()
         {
             saveData = SaveManager.Instance.Load();
-            PlayerController.Instance.Load(saveData.playerData);
-            WorldManager.Instance.Load(saveData.worldData);
-            Inventory.Inventory.Instance.Load(saveData.inventoryData);
+            if (saveData != null)
+            {
+                PlayerController.Instance.Load(saveData.playerData);
+                WorldManager.Instance.Load(saveData.worldData);
+                Inventory.Inventory.Instance.Load(saveData.inventoryData);
+            }
         }
         public void SetState(GameState state)
         {

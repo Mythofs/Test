@@ -17,6 +17,6 @@ namespace Scripts.Items
         public Sprite ItemSprite => itemSprite;
         public int MaxStack => maxStack;
         public List<Item> CraftingRecipe => craftingRecipe;
-        public int CraftedAmount => CraftedAmount;
+        public int CraftedAmount => craftedAmount;
     }
 }

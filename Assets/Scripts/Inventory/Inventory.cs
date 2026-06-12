@@ -57,15 +57,12 @@ namespace Scripts.Inventory
                     item.SetAmount(0);
                 }
             }
-            UpdateCraftable();
-            InventoryManager.Instance.Display();
             if (ItemList.Count == Capacity && item.Amount > 0)
             {
                 if (totalItems.ContainsKey(item.ItemBase))
                     totalItems[item.ItemBase] += origAmount - item.Amount;
                 else
                     totalItems.Add(item.ItemBase, origAmount - item.Amount);
-                return item;
             }
             else
             {
@@ -73,22 +70,40 @@ namespace Scripts.Inventory
                     totalItems[item.ItemBase] += origAmount;
                 else
                     totalItems.Add(item.ItemBase, origAmount);
-                return new Item(item.ItemBase, 0);
             }
+            UpdateCraftable();
+            InventoryManager.Instance.Display();
+            if (item.Amount > 0)
+                return item;
+            return new Item(item.ItemBase, 0);
         }
         public void RemoveItem(Item item)
         {
-            for (int a = ItemList.Count - 1; a >= 0; a++)
+            if (!totalItems.ContainsKey(item.ItemBase))
+                return;
+            totalItems[item.ItemBase] -= item.Amount;
+            if (totalItems[item.ItemBase] <= 0)
+                totalItems.Remove(item.ItemBase);
+            for (int a = ItemList.Count - 1; a >= 0; a--)
             {
-                Item item1 = ItemList[a];
-                if (item1.ItemBase == item.ItemBase)
+                Item invItem = ItemList[a];
+                if (invItem.ItemBase == item.ItemBase)
                 {
-                    item1.SetAmount(item1.Amount - item.Amount);
-                    if (item1.Amount <= 0)
-                        ItemList.Remove(item1);
-                    break;
+                    if(invItem.Amount >= item.Amount)
+                    {
+                        invItem.SetAmount(invItem.Amount - item.Amount);
+                        if (invItem.Amount == 0)
+                            ItemList.Remove(invItem);
+                        return;
+                    }
+                    else
+                    {
+                        ItemList.Remove(invItem);
+                        item.SetAmount(item.Amount - invItem.Amount);
+                    }
                 }
             }
+            UpdateCraftable();
             InventoryManager.Instance.Display();
         }
         public int Count()
@@ -104,7 +119,9 @@ namespace Scripts.Inventory
         private void UpdateCraftable()
         {
             foreach (ItemBase itemBase in itemDatabase.AllItems.Values)
-                if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
+                if (CraftableItems.Contains(itemBase) && !CanCraft(itemBase))
+                    CraftableItems.Remove(itemBase);
+                else if (!CraftableItems.Contains(itemBase) && CanCraft(itemBase))
                     CraftableItems.Add(itemBase);
             CraftingManager.Instance.SetContent();
         }
@@ -157,6 +174,7 @@ namespace Scripts.Inventory
                 AddItem(new Item(item, item.CraftedAmount));
             }
             InventoryManager.Instance.Display();
+            CraftingManager.Instance.SetContent();
         }
     }
 }

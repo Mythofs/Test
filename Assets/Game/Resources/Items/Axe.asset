@@ -19,6 +19,4 @@ MonoBehaviour:
   craftingRecipe:
   - itemBase: {fileID: 11400000, guid: f39103c4017bb2f478db994b66c28e32, type: 2}
     amount: 1
-  - itemBase: {fileID: 11400000, guid: 924265ca2c7a81b4cb14f877b7031810, type: 2}
-    amount: 1
   craftedAmount: 1

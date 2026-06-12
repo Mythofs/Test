@@ -7,9 +7,10 @@ namespace Scripts.Saving
     {
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         public static SaveManager Instance;
-        private readonly string savePath = Application.persistentDataPath + "/save.save";
-        private void Start()
+        private string savePath;
+        private void Awake()
         {
+            savePath = Application.persistentDataPath + "/save.save";
             if (Instance == null)
                 Instance = this;
             else
@@ -23,8 +24,13 @@ namespace Scripts.Saving
         }
         public SaveData Load()
         {
-            string content = File.ReadAllText(savePath);
-            return JsonUtility.FromJson<SaveData>(content);
+            Debug.Log(savePath);
+            if (File.Exists(savePath))
+            {
+                string content = File.ReadAllText(savePath);
+                return JsonUtility.FromJson<SaveData>(content);
+            }
+            return null;
         }
     }
 }

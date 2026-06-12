@@ -19,6 +19,11 @@ namespace Scripts.Menu
 			OnSlotSelected?.Invoke(this);
 			MenuManager.Instance.SetText(name);
         }
+        public override void OnDeselect(BaseEventData eventData)
+        {
+			base.OnDeselect(eventData);
+			Player.PlayerInputManager.Instance.Control.UI.Submit.performed -= OnSubmit;
+        }
 		private void OnSubmit(InputAction.CallbackContext context)
 		{
 			Debug.Log(name + " submitted");

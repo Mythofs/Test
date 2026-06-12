@@ -3,11 +3,12 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Scripts.Crafting
 {
-    class CraftingSlot : Selectable, ISubmitHandler
+    class CraftingSlot : Selectable
     {
         [SerializeField] private Image highlight;
         [SerializeField] private TextMeshProUGUI itemName;
@@ -27,16 +28,19 @@ namespace Scripts.Crafting
             highlight.enabled = true;
             OnSlotSelected?.Invoke(this);
             CraftingManager.Instance.SetMainCrafting(itemBase);
+            Player.PlayerInputManager.Instance.Control.UI.Submit.performed += OnSubmit;
         }
 
         public override void OnDeselect(BaseEventData eventData)
         {
             base.OnDeselect(eventData);
             highlight.enabled = false;
+            Player.PlayerInputManager.Instance.Control.UI.Submit.performed -= OnSubmit;
         }
-        public void OnSubmit(BaseEventData eventData)
+        public void OnSubmit(InputAction.CallbackContext context)
         {
             Inventory.Inventory.Instance.Craft(itemBase);
+            CraftingManager.Instance.Open();
         }
         public void SetItem(ItemBase item)
         {

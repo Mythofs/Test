@@ -33,9 +33,7 @@ namespace Scripts.Player
 			{
 				last = Time.time;
 				if (GameManager.Instance.State == GameManager.GameState.Overworld)
-				{
 					GameManager.Instance.SetState(GameManager.GameState.Menu);
-				}
 				else
 				{
 					GameManager.Instance.SetState(GameManager.GameState.Overworld);

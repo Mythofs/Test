@@ -1,11 +1,8 @@
 Issues
-Crafting scrolling doesn't work
-Crafting/menu submitting doesn't work for some reason
 Debug save (probably doesn't work)
 Inventory doesn't work when accessed from menu
 
 Features
-Change crafting to use inputaction (idk why OnSubmit doesn't work)
 Actually draw the real sprites
 Add encoding to the save files (low priority)
 Create the battle system, idk even know what it should look like tbh card based or smth?
