@@ -1,5 +1,7 @@
+using Assets.Scripts.Dialog;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scripts.Interactables
 {
@@ -7,6 +9,8 @@ namespace Scripts.Interactables
     {
         [SerializeField] private Sprite sprite;
         [SerializeField] private string[] dialog;
+        [SerializeField] private Image npcImage;
+        [SerializeField] private Sprite dialogSprite;
         private int index = 0;
         private bool repeat = true;
         private bool cancel = false;
@@ -25,6 +29,8 @@ namespace Scripts.Interactables
                     repeat = false;
                     cancel = true;
                 }
+                npcImage.enabled = true;
+                npcImage.sprite = dialogSprite;
                 StartCoroutine(Display(dialog[index-1]));
             }
         }
@@ -36,6 +42,7 @@ namespace Scripts.Interactables
         }
         public override void Close()
         {
+            npcImage.enabled = false;
             repeat = true;
             cancel = false;
             index = 0;

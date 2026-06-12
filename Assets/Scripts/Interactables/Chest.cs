@@ -1,3 +1,4 @@
+using Assets.Scripts.Dialog;
 using Scripts.Items;
 using Scripts.LootTables;
 using System.Collections;

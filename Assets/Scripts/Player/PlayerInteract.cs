@@ -2,6 +2,7 @@ using Scripts.Managers;
 using Scripts.Interactables;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Android;
 
 namespace Scripts.Player
 {
@@ -10,13 +11,16 @@ namespace Scripts.Player
         private Vector2 offset = new(0f, -0.3f);
         private PlayerControl control;
         private LayerMask interactableObjectsLayer;
-        private bool InInteract;
         private SpriteRenderer sr;
-        private IInteractable script;
+        public IInteractable InteractScript { get; private set; }
+        public static PlayerInteract Instance;
         private void Awake()
         {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
-            InInteract = false;
         }
         private void Start()
         {
@@ -28,38 +32,26 @@ namespace Scripts.Player
             if (control == null)
                 return;
             control.Player.Interact.performed += OnInteract;
-            control.Player.Cancel.performed += OnCancel;
         }
         private void OnDisable()
         {
             if (control == null)
                 return;
             control.Player.Interact.performed -= OnInteract;
-            control.Player.Cancel.performed -= OnCancel;
-        }
-        private void OnCancel(InputAction.CallbackContext content)
-        {
-            if (InInteract && script.CanCancel())
-            {
-                script.Close();
-                InInteract = false;
-                GameManager.Instance.SetState(GameManager.GameState.Overworld);
-            }
         }
         private void OnInteract(InputAction.CallbackContext context)
         {
-            if (script != null && script.GetInteracting()) return;
-            if (InInteract)
+            if (InteractScript != null && InteractScript.GetInteracting()) return;
+            if (GameManager.Instance.State == GameManager.GameState.Interact)
             {
-                if (script.RepeatedInteract())
+                if (InteractScript.RepeatedInteract())
                 {
                     GameManager.Instance.SetState(GameManager.GameState.Interact);
-                    script.Interact();
+                    InteractScript.Interact();
                 }
                 else
                 {
-                    script.Close();
-                    InInteract = false;
+                    InteractScript.Close();
                     GameManager.Instance.SetState(GameManager.GameState.Overworld);
                 }
                 return;
@@ -68,12 +60,11 @@ namespace Scripts.Player
             if (col != null)
             {
                 sr = col.GetComponent<SpriteRenderer>();
-                script = sr.GetComponent<IInteractable>();
-                if (script.CanInteract())
+                InteractScript = sr.GetComponent<IInteractable>();
+                if (InteractScript.CanInteract())
                 {
                     GameManager.Instance.SetState(GameManager.GameState.Interact);
-                    InInteract = true;
-                    script.Interact();
+                    InteractScript.Interact();
                 }
             }
             else
