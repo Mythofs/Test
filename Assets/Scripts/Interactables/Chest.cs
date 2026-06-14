@@ -1,4 +1,4 @@
-using Assets.Scripts.Dialog;
+using Scripts.Dialog;
 using Scripts.Items;
 using Scripts.LootTables;
 using System.Collections;
@@ -36,7 +36,7 @@ namespace Scripts.Interactables
         private IEnumerator Display(string text)
         {
             Interacting = true;
-            yield return StartCoroutine(DialogBox.Instance.DisplayText(text));
+            yield return StartCoroutine(DialogManager.Instance.DisplayText(text));
             Interacting = false;
         }
         public override bool CanInteract() => !opened;

@@ -1,4 +1,4 @@
-using Assets.Scripts.Dialog;
+using Scripts.Dialog;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ namespace Scripts.Interactables
     public class NPC : IInteractable
     {
         [SerializeField] private Sprite sprite;
-        [SerializeField] private string[] dialog;
+        [SerializeField] private DialogObject dialog;
         [SerializeField] private Image npcImage;
         [SerializeField] private Sprite dialogSprite;
         private int index = 0;
@@ -18,26 +18,27 @@ namespace Scripts.Interactables
         {
             base.Awake();
             spriteRenderer.sprite = sprite;
+            npcImage.enabled = false;
         }
         public override void Interact()
         {
-            if (dialog.Length > index)
+            if (dialog.Text.Length > index)
             {
                 index++;
-                if (index >= dialog.Length)
+                if (index >= dialog.Text.Length)
                 {
                     repeat = false;
                     cancel = true;
                 }
-                npcImage.enabled = true;
                 npcImage.sprite = dialogSprite;
-                StartCoroutine(Display(dialog[index-1]));
+                npcImage.enabled = true;
+                StartCoroutine(Display());
             }
         }
-        private IEnumerator Display(string text)
+        private IEnumerator Display()
         {
             Interacting = true;
-            yield return StartCoroutine(DialogBox.Instance.DisplayText(text));
+            yield return StartCoroutine(DialogManager.Instance.DisplayText(dialog, index));
             Interacting = false;
         }
         public override void Close()

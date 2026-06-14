@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Dialog;
+﻿using Scripts.Dialog;
 using UnityEngine;
 
 namespace Scripts.Interactables
@@ -16,7 +16,7 @@ namespace Scripts.Interactables
         public abstract bool CanInteract();
         public virtual void Close()
         {
-            DialogBox.Instance.Enable(false);
+            DialogManager.Instance.Enable(false);
         }
         public virtual bool CanCancel() => true;
         public virtual bool RepeatedInteract() => false;
