@@ -9,18 +9,19 @@ namespace Scripts.Interactables
 		[SerializeField] private Camera overworldCamera;
         public override void Interact()
         {
-            Interacting = true;
+            interacting = true;
             craftingCamera.depth = 0;
             overworldCamera.depth = -1;
             CraftingManager.Instance.Open();
         }
-        public override bool CanInteract() => true;
+        public override bool CanInteract() => !interacting;
         public override void Close()
         {
+            interacting = false;
             base.Close();
             craftingCamera.depth = -1;
             overworldCamera.depth = 0;
-            Interacting = false;
         }
+        public override bool CanCancel() => interacting;
 	}
 }

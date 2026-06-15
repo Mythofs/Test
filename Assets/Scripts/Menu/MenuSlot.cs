@@ -26,8 +26,19 @@ namespace Scripts.Menu
         }
 		private void OnSubmit(InputAction.CallbackContext context)
 		{
-			Debug.Log(name + " submitted");
 			action.Execute();
 		}
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (Player.PlayerInputManager.Instance != null)
+                Player.PlayerInputManager.Instance.Control.UI.Submit.performed -= OnSubmit;
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (Player.PlayerInputManager.Instance != null)
+                Player.PlayerInputManager.Instance.Control.UI.Submit.performed -= OnSubmit;
+        }
     }
 }

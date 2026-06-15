@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Scripts.Managers;
+using System.Text;
 
 namespace Scripts.Dialog
 {
@@ -16,28 +17,35 @@ namespace Scripts.Dialog
         private TextMeshProUGUI text;
         private Dictionary<string, DialogObject> dialogOptionMap = new(); //contains the followup responses to each choice
         private List<DialogOption> dialogOptionElements = new(); //contains references to the actual UI elements
+        public bool InDisplay { get; private set; }
         private void Awake()
         {
             Instance = this;
             Enable(false);
             text = GetComponentInChildren<TextMeshProUGUI>();
             text.text = "";
+            InDisplay = false;
         }
         public IEnumerator DisplayText(DialogObject dialog, int index)
         {
+            InDisplay = true;
             dialogOptionsContainer.gameObject.SetActive(false);
-            UIManager.Instance.SetCanvas(dialogCanvas);
             text.text = "";
             Enable(true);
+            StringBuilder stringBuilder = new StringBuilder();
             foreach (char c in dialog.Text[index])
             {
-                text.text += c;
+                stringBuilder.Append(c);
+                text.SetText(stringBuilder);
                 yield return null;
             }
-            if(dialog.HasDialogOption)
+            if (dialog.HasDialogOption && index == dialog.Text.Length - 1)
             {
+                Player.PlayerInputManager.Instance.Control.Player.Interact.Disable();
+                UIManager.Instance.SetCanvas(dialogCanvas);
                 dialogOptionsContainer.gameObject.SetActive(true);
-                foreach(DialogOption option in dialogOptionElements)
+                DialogOption[] children = dialogOptionsContainer.GetComponentsInChildren<DialogOption>();
+                foreach (DialogOption option in children)
                     Destroy(option.gameObject);
                 dialogOptionElements.Clear();
                 dialogOptionMap = dialog.DialogMap();
@@ -49,9 +57,12 @@ namespace Scripts.Dialog
                 }
                 EventSystem.current.SetSelectedGameObject(dialogOptionElements[0].gameObject);
             }
+            else if (index == dialog.Text.Length - 1)
+                InDisplay = false;
         }
         public IEnumerator DisplayText(string dialog)
         {
+            InDisplay = true;
             dialogOptionsContainer.gameObject.SetActive(false);
             text.text = "";
             Enable(true);
@@ -60,7 +71,7 @@ namespace Scripts.Dialog
                 text.text += c;
                 yield return null;
             }
-
+            InDisplay = false;
         }
         public void Enable(bool b)
         {
@@ -68,6 +79,7 @@ namespace Scripts.Dialog
         }
         public void Submit(string optionName)
         {
+            Player.PlayerInputManager.Instance.Control.Player.Interact.Enable();
             StartCoroutine(DisplayText(dialogOptionMap[optionName], 0));
         }
     }

@@ -1,6 +1,6 @@
 Issues
 Debug save (probably doesn't work)
-Inventory doesn't work when accessed from menu
+Going into inventory from menu should close menu
 
 Features
 Actually draw the real sprites
@@ -8,6 +8,5 @@ Add encoding to the save files (low priority)
 Create the battle system, idk even know what it should look like tbh card based or smth?
 Worldbuild?!?!
 Implement pixel perfect cameras (after/during drawing the sprites)
-Finish dialog options
 
 Refactor

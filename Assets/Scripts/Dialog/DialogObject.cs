@@ -9,14 +9,17 @@ namespace Scripts.Dialog
         [SerializeField] private string[] text;
         [SerializeField] private bool hasDialogOption;
         [SerializeField] private List<DialogObjectEntry> dialogOptions;
-        private Dictionary<string, DialogObject> dialogMap = new();
+        private Dictionary<string, DialogObject> dialogMap;
         public string[] Text => text;
         public bool HasDialogOption => hasDialogOption;
         public Dictionary<string, DialogObject> DialogMap()
         {
-            if(dialogMap == null)
+            if (dialogMap == null)
+            {
+                dialogMap = new();
                 foreach (DialogObjectEntry entry in dialogOptions)
                     dialogMap.Add(entry.optionName, entry.dialogOption);
+            }
             return dialogMap;
         }
     }

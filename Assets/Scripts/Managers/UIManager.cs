@@ -22,7 +22,6 @@ namespace Scripts.Managers
                     group.interactable = true;
                 else
                     group.interactable = false;
-            Debug.Log(canvas);
         }
         public void DisableCanvas()
         {

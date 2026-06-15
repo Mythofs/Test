@@ -6,11 +6,12 @@ namespace Scripts.Interactables
     public abstract class IInteractable: MonoBehaviour
     {
         protected SpriteRenderer spriteRenderer;
-        protected bool Interacting;
+        protected bool interacting;
         protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.enabled = true;
+            interacting = false;
         }
         public abstract void Interact();
         public abstract bool CanInteract();
@@ -18,8 +19,7 @@ namespace Scripts.Interactables
         {
             DialogManager.Instance.Enable(false);
         }
-        public virtual bool CanCancel() => true;
+        public abstract bool CanCancel();
         public virtual bool RepeatedInteract() => false;
-        public bool GetInteracting() => Interacting;
     }
 }

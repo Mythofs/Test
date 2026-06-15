@@ -28,8 +28,11 @@ namespace Scripts.Player
             GameManager.GameState state = GameManager.Instance.State;
             if (state == GameManager.GameState.Overworld)
                 return;
-            if (state == GameManager.GameState.Interact && PlayerInteract.Instance.InteractScript != null)
-                PlayerInteract.Instance.InteractScript.Close();
+            if (state == GameManager.GameState.Interact)
+                if (PlayerInteract.Instance.InteractScript.CanCancel())
+                    PlayerInteract.Instance.InteractScript.Close();
+                else
+                    return;
             if (state == GameManager.GameState.Menu)
                 MenuManager.Instance.Close();
             GameManager.Instance.SetState(GameManager.GameState.Overworld);

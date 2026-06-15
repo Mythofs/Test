@@ -13,7 +13,6 @@ namespace Scripts.Interactables
         [SerializeField] private Sprite dialogSprite;
         private int index = 0;
         private bool repeat = true;
-        private bool cancel = false;
         protected override void Awake()
         {
             base.Awake();
@@ -24,38 +23,29 @@ namespace Scripts.Interactables
         {
             if (dialog.Text.Length > index)
             {
-                index++;
-                if (index >= dialog.Text.Length)
-                {
-                    repeat = false;
-                    cancel = true;
-                }
                 npcImage.sprite = dialogSprite;
                 npcImage.enabled = true;
                 StartCoroutine(Display());
+                index++;
+                if (index >= dialog.Text.Length)
+                    repeat = false;
             }
         }
         private IEnumerator Display()
         {
-            Interacting = true;
+            interacting = true;
             yield return StartCoroutine(DialogManager.Instance.DisplayText(dialog, index));
-            Interacting = false;
+            interacting = false;
         }
         public override void Close()
         {
             npcImage.enabled = false;
             repeat = true;
-            cancel = false;
             index = 0;
             base.Close();
         }
-        public override bool CanInteract() => true;
-        public override bool CanCancel()
-        {
-            if (Interacting)
-                return false;
-            return cancel;
-        }
+        public override bool CanInteract() => !interacting;
+        public override bool CanCancel() => !DialogManager.Instance.InDisplay;
         public override bool RepeatedInteract() => repeat;
     }
 }

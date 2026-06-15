@@ -8,6 +8,7 @@ namespace Scripts.Menu.MenuActions
     {
         public override void Execute()
         {
+            MenuManager.Instance.Close();
             GameManager.Instance.SetState(GameManager.GameState.Inventory);
         }
     }

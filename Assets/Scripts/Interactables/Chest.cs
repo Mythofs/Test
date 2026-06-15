@@ -24,7 +24,6 @@ namespace Scripts.Interactables
         {
             if (!opened)
             {
-                Interacting = true;
                 opened = true;
                 Item item = table.GetRandomItem();
                 int amount = item.Amount;
@@ -33,14 +32,18 @@ namespace Scripts.Interactables
                 StartCoroutine(Display("You recieved " + (amount - leftover.Amount) + " " + item.ItemBase.ItemName));
             }
         }
-        private IEnumerator Display(string text)
+        public IEnumerator Display(string s)
         {
-            Interacting = true;
-            yield return StartCoroutine(DialogManager.Instance.DisplayText(text));
-            Interacting = false;
+            interacting = true;
+            yield return StartCoroutine(DialogManager.Instance.DisplayText(s));
         }
-        public override bool CanInteract() => !opened;
-        public override bool CanCancel() => false;
+        public override bool CanInteract() => !opened || (interacting && !DialogManager.Instance.InDisplay); //either unopened or the text has finished displaying
+        public override bool CanCancel() => opened && interacting && !DialogManager.Instance.InDisplay;
+        public override void Close()
+        {
+            base.Close();
+            interacting = false;
+        }
         public string Serialize()
         {
             ChestData data = new();

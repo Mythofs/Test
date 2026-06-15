@@ -15,5 +15,9 @@ MonoBehaviour:
   text:
   - Hello there,
   - I hope ur doing well
-  hasDialogOption: 0
-  dialogOptions: []
+  hasDialogOption: 1
+  dialogOptions:
+  - optionName: Yes
+    dialogOption: {fileID: 11400000, guid: fb7b493c26e82664d9936e32027092bf, type: 2}
+  - optionName: No
+    dialogOption: {fileID: 11400000, guid: 6300e5ed8887d9f4cb605209d7dd05e2, type: 2}

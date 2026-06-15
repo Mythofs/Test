@@ -1,8 +1,8 @@
-using Scripts.Managers;
+using Scripts.Dialog;
 using Scripts.Interactables;
+using Scripts.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Android;
 
 namespace Scripts.Player
 {
@@ -41,18 +41,17 @@ namespace Scripts.Player
         }
         private void OnInteract(InputAction.CallbackContext context)
         {
-            if (InteractScript != null && InteractScript.GetInteracting()) return;
-            if (GameManager.Instance.State == GameManager.GameState.Interact)
+            if(GameManager.Instance.State == GameManager.GameState.Interact)
             {
-                if (InteractScript.RepeatedInteract())
+                if (InteractScript.CanInteract())
                 {
-                    GameManager.Instance.SetState(GameManager.GameState.Interact);
-                    InteractScript.Interact();
-                }
-                else
-                {
-                    InteractScript.Close();
-                    GameManager.Instance.SetState(GameManager.GameState.Overworld);
+                    if (InteractScript.RepeatedInteract())
+                        InteractScript.Interact();
+                    else
+                    {
+                        InteractScript.Close();
+                        GameManager.Instance.SetState(GameManager.GameState.Overworld);
+                    }
                 }
                 return;
             }
