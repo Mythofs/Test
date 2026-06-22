@@ -13,6 +13,7 @@ namespace Scripts.Managers
     {
         [SerializeField] private Camera overworldCam;
         [SerializeField] private Camera inventoryCam;
+        [SerializeField] private Camera battleCam;
         public static GameManager Instance { get; private set; }
         public SaveData saveData = new();
         public GameState State { get; private set; }
@@ -68,16 +69,24 @@ namespace Scripts.Managers
             {
                 overworldCam.depth = 0;
                 inventoryCam.depth = -1;
+                battleCam.depth = -1;
                 UIManager.Instance.DisableCanvas();
             }
-            if (state == GameState.Inventory)
+            else if (state == GameState.Inventory)
             {
                 overworldCam.depth = -1;
                 inventoryCam.depth = 0;
+                battleCam.depth = -1;
                 InventoryManager.Instance.Open();
             }
             else if (state == GameState.Menu)
                 MenuManager.Instance.Open();
+            else if (state == GameState.Battle)
+            {
+                overworldCam.depth = -1;
+                inventoryCam.depth = -1;
+                battleCam.depth = 0;
+            }
             StateChangedThisFrame = true;
         }
         private void SetEnabled(InputAction action, bool enabled)
@@ -85,7 +94,7 @@ namespace Scripts.Managers
             if (enabled) action.Enable();
             else action.Disable();
         }
-        public enum GameState { Overworld, Interact, Inventory, Menu }
+        public enum GameState { Overworld, Interact, Inventory, Menu, Battle }
         private readonly Dictionary<GameState, GameStateConfig> stateConfig = new()
         {
             [GameState.Overworld] = new GameStateConfig()
@@ -118,6 +127,14 @@ namespace Scripts.Managers
                 inventoryEnabled = false,
                 interactEnabled = false,
                 menuEnabled = true,
+                UIEnabled = true,
+            },
+            [GameState.Battle] = new GameStateConfig()
+            {
+                movementEnabled = false,
+                inventoryEnabled = false,
+                interactEnabled = false,
+                menuEnabled = false,
                 UIEnabled = true,
             },
         };
