@@ -6,7 +6,7 @@ namespace Scripts.Items
     [CreateAssetMenu(fileName = "ItemDatabase", menuName = "ItemDatabase/Create a new ItemDatabase")]
     public class ItemDatabase : ScriptableObject
     {
-        [SerializeField] List<ItemBase> allItemsList;
+        [SerializeField] private List<ItemBase> allItemsList;
         private Dictionary<string, ItemBase> allItems;
         private void OnEnable()
         {

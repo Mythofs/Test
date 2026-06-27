@@ -5,7 +5,7 @@ Going into inventory from menu should close menu
 Features
 Actually draw the real sprites
 Add encoding to the save files (low priority)
-Create the battle system, idk even know what it should look like tbh card based or smth?
+Actually create the combat system -> placing units, moving them, attacking, etc
 Worldbuild?!?!
 Implement pixel perfect cameras (after/during drawing the sprites)
 

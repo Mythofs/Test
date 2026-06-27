@@ -21,7 +21,7 @@ namespace Scripts.Player
         private LayerMask solidObjectsLayer;
         private LayerMask longGrassLayer;
         private LayerMask interactableObjectsLayer;
-        private LayerMask portalsLayer;
+        private LayerMask specialTilesLayer;
         private Action<InputAction.CallbackContext> onCancelInput;
         private readonly float hitboxSize = 0.4f;
         public static PlayerMovement Instance;
@@ -40,7 +40,7 @@ namespace Scripts.Player
             solidObjectsLayer = LayerMask.GetMask("SolidObjects");
             longGrassLayer = LayerMask.GetMask("LongGrass");
             interactableObjectsLayer = LayerMask.GetMask("InteractableObjects");
-            portalsLayer = LayerMask.GetMask("Portals");
+            specialTilesLayer = LayerMask.GetMask("SpecialTiles");
         }
         private void Start()
         {
@@ -120,7 +120,7 @@ namespace Scripts.Player
                 isRunning = false;
             }
             CheckEncounters();
-            CheckPortal();
+            CheckSpecialTiles();
         }
         private bool IsWalkable(Vector2 target)
         {
@@ -137,13 +137,14 @@ namespace Scripts.Player
                     Debug.Log("Encountered a wild pokemon");
             }
         }
-        private void CheckPortal()
+        private void CheckSpecialTiles()
         {
-            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x + offset.x, transform.position.y + offset.y), hitboxSize, portalsLayer);
+            Collider2D col = Physics2D.OverlapCircle(new Vector2(transform.position.x + offset.x, transform.position.y + offset.y), hitboxSize, specialTilesLayer);
             if (col != null)
             {
-                Portal portal = col.GetComponent<Portal>();
-                portal.Warp(transform);
+                SpriteRenderer sr = col.GetComponent<SpriteRenderer>();
+                ISpecialTile tile = sr.GetComponent<ISpecialTile>();
+                tile.Interact();
             }
         }
         private float SnapY(float y)

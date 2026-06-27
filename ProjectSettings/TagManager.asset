@@ -16,7 +16,7 @@ TagManager:
   - SolidObjects
   - LongGrass
   - InteractableObjects
-  - Portals
+  - SpecialTiles
   - Background
   - 
   - 

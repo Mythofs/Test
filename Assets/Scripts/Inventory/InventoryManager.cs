@@ -1,6 +1,5 @@
 using Scripts.Items;
 using Scripts.Managers;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

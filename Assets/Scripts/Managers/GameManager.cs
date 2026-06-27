@@ -19,12 +19,14 @@ namespace Scripts.Managers
         public GameState State { get; private set; }
         public bool StateChangedThisFrame { get; private set; }
         private PlayerControl control;
+        public int Level { get; set; }
         private void Awake()
         {
             if (Instance == null)
                 Instance = this;
             else
                 Destroy(this);
+            Level = 0;
         }
         private void Start()
         {
@@ -86,6 +88,7 @@ namespace Scripts.Managers
                 overworldCam.depth = -1;
                 inventoryCam.depth = -1;
                 battleCam.depth = 0;
+                BattleManager.Instance.Open();
             }
             StateChangedThisFrame = true;
         }
