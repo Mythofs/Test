@@ -7,17 +7,18 @@ namespace Scripts.Units
     public class UnitDatabase : ScriptableObject
     {
         [SerializeField] private List<UnitBase> unitList;
-        private Dictionary<string, UnitBase> unitMap;
+        private Dictionary<int, UnitBase> unitMap;
         private void OnEnable()
         {
             if (unitMap == null)
             {
                 unitMap = new();
                 foreach (UnitBase unit in unitList)
-                    unitMap.Add(unit.Name, unit);
+                    if(unit != null)
+                        unitMap.Add(unit.Id, unit);
             }
         }
-        public Dictionary<string, UnitBase> UnitMap => unitMap;
-        public UnitBase GetUnitByName(string name) => unitMap[name];
+        public Dictionary<int, UnitBase> UnitMap => unitMap;
+        public UnitBase GetUnitById(int id) => unitMap[id];
     }
 }

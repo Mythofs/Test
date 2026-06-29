@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3774e40959773e2448ecaea978814bf0, type: 3}
-  m_Name: Skeleton
+  m_Name: 1-Skeleton
   m_EditorClassIdentifier: Assembly-CSharp::Scripts.Units.UnitBase
-  maxHP: 0
-  damage: 0
-  name: 
-  sprite: {fileID: 0}
-  selected: {fileID: 0}
-  description: 
-  moveDistance: 0
+  maxHP: 1
+  damage: 1
+  name: Skeleton
+  sprite: {fileID: 4354231566380549168, guid: 94092a0834e98bd46847df1a1bb0cab2, type: 3}
+  selected: {fileID: 3708309608629342768, guid: 2e41a585cf7d89842b29d3ec95937742, type: 3}
+  description: A skeleton
+  moveDistance: 1
+  id: 1

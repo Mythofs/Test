@@ -17,10 +17,8 @@ namespace Scripts.Managers
         }
         public void SetCanvas(CanvasGroup canvas)
         {
-            Debug.Log(canvas);
             foreach (CanvasGroup group in canvases)
             {
-                Debug.Log(group);
                 if (canvas == group)
                     group.interactable = true;
                 else

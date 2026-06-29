@@ -67,6 +67,8 @@ namespace Scripts.Managers
             SetEnabled(control.Player.Menu, config.menuEnabled);
             if (config.UIEnabled) control.UI.Enable();
             else control.UI.Disable();
+            if (config.battleEnabled) control.Battle.Enable();
+            else control.Battle.Disable();
             if (state == GameState.Overworld)
             {
                 overworldCam.depth = 0;
@@ -107,6 +109,7 @@ namespace Scripts.Managers
                 interactEnabled = true,
                 menuEnabled = true,
                 UIEnabled = false,
+                battleEnabled = false,
             },
             [GameState.Inventory] = new GameStateConfig()
             {
@@ -115,6 +118,7 @@ namespace Scripts.Managers
                 interactEnabled = false,
                 menuEnabled = false,
                 UIEnabled = true,
+                battleEnabled = false,
             },
             [GameState.Interact] = new GameStateConfig()
             {
@@ -123,6 +127,7 @@ namespace Scripts.Managers
                 interactEnabled = true,
                 menuEnabled = false,
                 UIEnabled = true,
+                battleEnabled = false,
             },
             [GameState.Menu] = new GameStateConfig()
             {
@@ -131,6 +136,7 @@ namespace Scripts.Managers
                 interactEnabled = false,
                 menuEnabled = true,
                 UIEnabled = true,
+                battleEnabled = false,
             },
             [GameState.Battle] = new GameStateConfig()
             {
@@ -138,7 +144,8 @@ namespace Scripts.Managers
                 inventoryEnabled = false,
                 interactEnabled = false,
                 menuEnabled = false,
-                UIEnabled = true,
+                UIEnabled = false,
+                battleEnabled = true,
             },
         };
         [System.Serializable]
@@ -149,6 +156,7 @@ namespace Scripts.Managers
             public bool interactEnabled;
             public bool menuEnabled;
             public bool UIEnabled;
+            public bool battleEnabled;
         }
     }
 }

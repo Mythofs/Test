@@ -351,6 +351,78 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Battle"",
+            ""id"": ""d6d3dd00-4422-48f9-9a15-6baf7f7177ec"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""59797a91-0a47-42a5-acbd-81900ab25e1e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""3ad59122-01c7-40c9-a2be-ede973fb1e90"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""0d7426ca-b69e-4d71-8fc4-d149d5747d6a"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""eb8309a4-8f93-4515-b9f6-c86a896fc27d"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""c8ac3f54-44fe-4db8-93a7-7b6168542e53"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8ba4cfe8-44ae-4240-b337-9102ec3c0aef"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -367,12 +439,16 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+        // Battle
+        m_Battle = asset.FindActionMap("Battle", throwIfNotFound: true);
+        m_Battle_Move = m_Battle.FindAction("Move", throwIfNotFound: true);
     }
 
     ~@PlayerControl()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerControl.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerControl.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Battle.enabled, "This will cause a leak and performance issues, PlayerControl.Battle.Disable() has not been called.");
     }
 
     /// <summary>
@@ -702,6 +778,102 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="UIActions" /> instance referencing this action map.
     /// </summary>
     public UIActions @UI => new UIActions(this);
+
+    // Battle
+    private readonly InputActionMap m_Battle;
+    private List<IBattleActions> m_BattleActionsCallbackInterfaces = new List<IBattleActions>();
+    private readonly InputAction m_Battle_Move;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Battle".
+    /// </summary>
+    public struct BattleActions
+    {
+        private @PlayerControl m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public BattleActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_Battle_Move;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Battle; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="BattleActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(BattleActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="BattleActions" />
+        public void AddCallbacks(IBattleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_BattleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_BattleActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="BattleActions" />
+        private void UnregisterCallbacks(IBattleActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="BattleActions.UnregisterCallbacks(IBattleActions)" />.
+        /// </summary>
+        /// <seealso cref="BattleActions.UnregisterCallbacks(IBattleActions)" />
+        public void RemoveCallbacks(IBattleActions instance)
+        {
+            if (m_Wrapper.m_BattleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="BattleActions.AddCallbacks(IBattleActions)" />
+        /// <seealso cref="BattleActions.RemoveCallbacks(IBattleActions)" />
+        /// <seealso cref="BattleActions.UnregisterCallbacks(IBattleActions)" />
+        public void SetCallbacks(IBattleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_BattleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_BattleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="BattleActions" /> instance referencing this action map.
+    /// </summary>
+    public BattleActions @Battle => new BattleActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -773,5 +945,20 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCancel(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Battle" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="BattleActions.AddCallbacks(IBattleActions)" />
+    /// <seealso cref="BattleActions.RemoveCallbacks(IBattleActions)" />
+    public interface IBattleActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
     }
 }

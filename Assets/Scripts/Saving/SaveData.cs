@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using Scripts.Player;
+﻿using Scripts.Interactables;
 using Scripts.Inventory;
-using Scripts.Interactables;
-using System.Collections.Generic;
+using Scripts.Player;
 
 namespace Scripts.Saving
 {

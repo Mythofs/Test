@@ -12,11 +12,13 @@ namespace Scripts.Units
         [SerializeField] private Sprite selected;
         [TextArea][SerializeField] private string description;
         [SerializeField] private int moveDistance;
+        [SerializeField] private int id;
         public int MaxHP => maxHP;
         public int Damage => damage;
         public string Name => name;
         public Sprite UnitSprite => sprite;
         public Sprite Selected => selected;
         public string Description => description;
+        public int Id => id;
     }
 }

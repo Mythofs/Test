@@ -61,31 +61,30 @@ namespace Scripts.Player
             control.Player.Move.performed -= OnMove;
             control.Player.Move.canceled -= onCancelInput;
         }
-        void Update()
+        private void Update()
         {
             if (!isMoving && input != Vector2.zero)
             {
-                if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-                    input.y = 0;
-                else
-                    input.x = 0;
-                Vector3 direction = new Vector3(input.x, input.y, 0);
-                if (direction != Vector3.zero)
-                {
-                    Facing = input;
-                    animator.SetFloat("moveX", input.x);
-                    animator.SetFloat("moveY", input.y);
-                    Vector2 target = new Vector3(transform.position.x + direction.x, transform.position.y + direction.y);
-                    if (IsWalkable(target))
-                        StartCoroutine(Move(target));
-                }
+                Facing = input;
+                animator.SetFloat("moveX", input.x);
+                animator.SetFloat("moveY", input.y);
+                Vector2 target = new(transform.position.x + input.x, transform.position.y + input.y);
+                if (IsWalkable(target))
+                    StartCoroutine(Move(target));
             }
             animator.SetBool("isMoving", isMoving);
         }
         private void OnMove(InputAction.CallbackContext context)
         {
             if (!isMoving)
+            {
                 input = context.ReadValue<Vector2>();
+                if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+                    input.y = 0;
+                else
+                    input.x = 0;
+                input = input.normalized;
+            }
             else if (context.ReadValue<Vector2>() != Vector2.zero)
             {
                 Vector2 raw = context.ReadValue<Vector2>();

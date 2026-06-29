@@ -7,10 +7,4 @@ namespace Scripts.Inventory
     {
         public List<ItemSaveData> items;
     }
-    [System.Serializable]
-    public struct ItemSaveData
-    {
-        public string itemName;
-        public int amount;
-    }
 }

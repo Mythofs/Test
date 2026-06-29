@@ -6,52 +6,80 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(RectTransform))]
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] private List<Level> levels;
-    [SerializeField] private List<Sprite> backgroundSprites;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private UnitDatabase unitDatabase;
+    [SerializeField] private TileConfigDatabase tileConfigDatabase;
+    [SerializeField] private BattleTile battleTilePrefab;
+    private RectTransform content;
     public static BattleManager Instance { get; private set; }
-    private BattleTile[] battleTiles;
+    public Dictionary<Vector2Int, BattleTile> BattleTileMap { get; private set; }
+    public BattleState State { get; private set; }
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(this);
-    }
-    private void Start()
-    {
-        battleTiles = GetComponentsInChildren<BattleTile>();
+        BattleTileMap = new();
+        content = GetComponent<RectTransform>();
     }
     public void Open()
     {
-        Debug.Log("Battlemanager opening");
         LoadLevel();
+        BattleMovement.Instance.SetSelected(new Vector2Int(0, 0));
         UIManager.Instance.SetCanvas(canvasGroup);
-        EventSystem.current.SetSelectedGameObject(battleTiles[0].gameObject);
+        EventSystem.current.SetSelectedGameObject(BattleTileMap[new Vector2Int(0, 0)].gameObject);
     }
     private void LoadLevel()
     {
+        foreach(BattleTile tile in BattleTileMap.Values)
+            Destroy(tile.gameObject);
+        BattleTileMap.Clear();
         Level level = levels[GameManager.Instance.Level];
         string levelstr = level.LevelStr;
-        string[] backgrounds = levelstr.Split(",");
-        for (int a = 0; a < backgrounds.Length; a++)
-            battleTiles[a].SetBackground(backgroundSprites[Convert.ToInt32(backgrounds[a])]);
-        string[] enemies = level.LevelStr.Split(",");
+        string[] rows = levelstr.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        content.sizeDelta = new Vector2(rows[0].Split(",", StringSplitOptions.RemoveEmptyEntries).Length, rows.Length);
+        for(int a = rows.Length - 1; a >= 0; a--)
+        {
+            string[] columns = rows[a].Split(",", StringSplitOptions.RemoveEmptyEntries);
+            for (int b = 0; b < columns.Length; b++)
+            {
+                BattleTile tile = Instantiate(battleTilePrefab, content);
+                tile.SetTileConfig(tileConfigDatabase.GetConfigById(Convert.ToInt32(columns[b])));
+                BattleTileMap.Add(new Vector2Int(b, a), tile);
+            }
+        }
+        string[] enemies = level.EnemyStr.Split(",", StringSplitOptions.RemoveEmptyEntries);
         foreach (string enemyStr in enemies)
         {
-            string[] sarr = enemyStr.Split(" ");
-            UnitBase unitBase = unitDatabase.GetUnitByName(sarr[0]);
-            battleTiles[Convert.ToInt32(sarr[1])].SetUnit(new Unit(unitBase, false));
+            string[] sarr = enemyStr.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            UnitBase unitBase = unitDatabase.GetUnitById(Convert.ToInt32(sarr[2]));
+            Vector2Int loc = new(Convert.ToInt32(sarr[0]), Convert.ToInt32(sarr[1]));
+            BattleTileMap[loc].SetUnit(new Unit(unitBase, false));
         }
-        string[] allies = level.LevelStr.Split(",");
+        string[] allies = level.AllyStr.Split(",", StringSplitOptions.RemoveEmptyEntries);
         foreach(string allyStr in allies)
         {
-            string[] sarr = allyStr.Split(" ");
-            UnitBase unitBase = unitDatabase.GetUnitByName(sarr[0]);
-            battleTiles[Convert.ToInt32(sarr[1])].SetUnit(new Unit(unitBase, true));
+            string[] sarr = allyStr.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            UnitBase unitBase = unitDatabase.GetUnitById(Convert.ToInt32(sarr[2]));
+            Vector2Int loc = new(Convert.ToInt32(sarr[0]), Convert.ToInt32(sarr[1]));
+            BattleTileMap[loc].SetUnit(new Unit(unitBase, true));
+        }
+        string[] deployLoc = level.SpawnArea.Split(",", StringSplitOptions.RemoveEmptyEntries);
+        foreach(string loc in deployLoc)
+        {
+            string[] sarr = loc.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            Vector2Int pos = new(Convert.ToInt32(sarr[0]), Convert.ToInt32(sarr[1]));
+            BattleTileMap[pos].SetSpawnArea(true);
         }
     }
+    public void SetState(BattleState state)
+    {
+        State = state;
+    }
+    public enum BattleState { Deploy, PlayerMove, PlayerAnimation, EnemyMove, EnemyAnimation }
 }

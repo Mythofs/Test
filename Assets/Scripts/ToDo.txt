@@ -1,12 +1,13 @@
 Issues
 Debug save (probably doesn't work)
-Going into inventory from menu should close menu
 
 Features
-Actually draw the real sprites
-Add encoding to the save files (low priority)
+Make battlemovement smoother (im too lazy to fix it atm)
 Actually create the combat system -> placing units, moving them, attacking, etc
-Worldbuild?!?!
+Worldbuild
+Actually draw the real sprites
 Implement pixel perfect cameras (after/during drawing the sprites)
+Add encoding to the save files (low priority)
 
 Refactor
+Change itemdatabase to use id instead of its name
