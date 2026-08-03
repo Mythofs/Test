@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,8 @@ namespace Scripts.Battle
 {
     public class BattleMovement : MonoBehaviour
     {
+        [SerializeField] private Camera battleCamera;
+        private Vector2Int cameraPos;
         private Vector2Int selectedPos;
         private Vector2Int input;
         private bool isMoving = false;
@@ -33,14 +36,14 @@ namespace Scripts.Battle
         {
             if(!isMoving && input != Vector2Int.zero)
             {
+                isMoving = true;
                 Vector2Int target = selectedPos + input;
                 if(battleTileMap.TryGetValue(target, out var value))
                 {
-                    selectedPos = target;
-                    selectedTile = value;
-                    transform.position = selectedTile.transform.position;
+                    SetSelected(target);
                     input = Vector2Int.zero;
                 }
+                isMoving = false;
             }
         }
         private void OnMove(InputAction.CallbackContext context)
@@ -62,6 +65,17 @@ namespace Scripts.Battle
             selectedPos = pos;
             selectedTile = battleTileMap[pos];
             transform.position = selectedTile.transform.position;
+        }
+        public void SetCameraPos(Vector2Int size) //maxwidth, maxheight
+        {
+            Vector2Int pos = new Vector2Int(size.x / 2, size.y / 2);
+            if (size.x * 16 > battleCamera.orthographicSize * 2)
+                pos.x = Convert.ToInt32(battleCamera.orthographicSize / 8);
+            if (size.y * 16 > battleCamera.orthographicSize * 2 * battleCamera.aspect)
+                pos.y = Convert.ToInt32(battleCamera.orthographicSize * battleCamera.aspect / 8);
+            cameraPos = pos;
+            Transform target = battleTileMap[pos].transform;
+            battleCamera.transform.position = new Vector3(target.position.x, target.position.y, battleCamera.transform.position.z);
         }
     }
 }

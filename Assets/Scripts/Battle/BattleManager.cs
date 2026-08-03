@@ -42,8 +42,10 @@ public class BattleManager : MonoBehaviour
         Level level = levels[GameManager.Instance.Level];
         string levelstr = level.LevelStr;
         string[] rows = levelstr.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-        content.sizeDelta = new Vector2(rows[0].Split(",", StringSplitOptions.RemoveEmptyEntries).Length, rows.Length);
-        for(int a = rows.Length - 1; a >= 0; a--)
+        int width = rows[0].Split(",", StringSplitOptions.RemoveEmptyEntries).Length;
+        content.sizeDelta = new Vector2(width, rows.Length);
+        BattleMovement.Instance.SetCameraPos(new Vector2Int(width, rows.Length));
+        for (int a = rows.Length - 1; a >= 0; a--)
         {
             string[] columns = rows[a].Split(",", StringSplitOptions.RemoveEmptyEntries);
             for (int b = 0; b < columns.Length; b++)
@@ -81,5 +83,5 @@ public class BattleManager : MonoBehaviour
     {
         State = state;
     }
-    public enum BattleState { Deploy, PlayerMove, PlayerAnimation, EnemyMove, EnemyAnimation }
+    public enum BattleState { PlayerMove, PlayerAnimation, EnemyMove, EnemyAnimation }
 }

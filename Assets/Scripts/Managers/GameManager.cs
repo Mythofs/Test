@@ -20,6 +20,7 @@ namespace Scripts.Managers
         public bool StateChangedThisFrame { get; private set; }
         private PlayerControl control;
         public int Level { get; set; }
+        private List<Unit> army { get; private set; }
         private void Awake()
         {
             if (Instance == null)
